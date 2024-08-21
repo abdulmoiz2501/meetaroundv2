@@ -27,7 +27,7 @@ class JammingScreenView extends StatelessWidget {
 
     // Use a post-frame callback to send the jamming request after the screen is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.sendJammingRequest(targetUserId); // Call the function with the targetUserId
+     // controller.sendJammingRequest(targetUserId); // Call the function with the targetUserId
     });
 
     return Scaffold(

@@ -18,7 +18,7 @@ class JammingScreenController extends GetxController {
   var categories = [].obs;
   var filteredTracks = [].obs;
 
-  late WebSocketChannel channel;
+  //late WebSocketChannel channel;
   final int userId;
    int? targetUserId;
 
@@ -39,12 +39,13 @@ class JammingScreenController extends GetxController {
     fetchSpotifyTracks();
   }
 
-  @override
+ /* @override
   void onClose() {
     channel.sink.close();
     super.onClose();
-  }
-
+  }*/
+///WEBSOCKETS v1
+/*
   // New method to initialize WebSocket from an external source
   void initializeWebSocket(WebSocketChannel webSocketChannel) {
     print('Initializing WebSocket connection...');
@@ -183,7 +184,8 @@ class JammingScreenController extends GetxController {
     print("Song URL sent: $songUrl");
     //print();
   }
-
+*/
+///WEBSOCKETS v1
 
   void toggleSearch() {
     isSearching.value = !isSearching.value;
@@ -273,6 +275,7 @@ class JammingScreenController extends GetxController {
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
 
+        print("the response of TRACK API is: $data");
         spotifyTracks.clear();
         categories.clear();
         for (var item in data) {
