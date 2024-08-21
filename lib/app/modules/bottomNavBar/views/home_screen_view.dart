@@ -48,7 +48,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     Get.lazyPut<JammingScreenController>(() => JammingScreenController(userId: userController.user.value.id));
 
     final SearchScreenController searchScreenController = Get.put(SearchScreenController());
-    connectWebSocket();
+    //connectWebSocket();
 
     locationController.addListener(() {
       final currentPosition = locationController.currentPosition.value;
@@ -146,15 +146,14 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     super.dispose();
   }
 
-  void connectWebSocket() {
+  /*void connectWebSocket() {
     channel = WebSocketChannel.connect(
       Uri.parse('wss://meet-around-apis-production.up.railway.app/ws/playback'),
     );
 
     final jammingController = Get.find<JammingScreenController>();
-    jammingController.initializeWebSocket(channel);
-  }
-
+    //jammingController.initializeWebSocket(channel);
+  }*/
   @override
   Widget build(BuildContext context) {
     final filteredUsers = _filterUsersWithinRadius();

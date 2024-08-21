@@ -138,10 +138,10 @@ class SearchScreenController extends GetxController {
       textCancel: "Reject",
       textConfirm: "Accept",
       onCancel: () {
-        Get.find<JammingScreenController>().sendJammingResponse(requestingUserId, 'reject');
+       // Get.find<JammingScreenController>().sendJammingResponse(requestingUserId, 'reject');
       },
       onConfirm: () {
-        Get.find<JammingScreenController>().sendJammingResponse(requestingUserId, 'accept');
+        //Get.find<JammingScreenController>().sendJammingResponse(requestingUserId, 'accept');
       },
     );
   }
