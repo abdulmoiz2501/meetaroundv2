@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scratch_project/app/controllers/user_controller.dart';
+import 'package:scratch_project/app/controllers/websocket_controller.dart';
 import 'package:scratch_project/app/utils/constants.dart';
 import 'package:scratch_project/app/utils/constraints/colors.dart';
 import 'package:scratch_project/app/utils/logging/logger.dart';
@@ -16,13 +17,13 @@ class ProfileScreenView extends GetView<ProfileScreenController> {
   @override
   Widget build(BuildContext context) {
     final ProfileScreenController controller =
-    Get.put(ProfileScreenController());
+        Get.put(ProfileScreenController());
 
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading:false,
+          automaticallyImplyLeading: false,
           // leading: IconButton(
           //   splashRadius: 20.r,
           //   // icon: SvgPicture.asset(
@@ -199,7 +200,7 @@ class EditProfile extends StatelessWidget {
                             offset: const Offset(
                                 0, 4), // Shadow is applied only downward
                             blurRadius:
-                            8.0, // Adjust the blur radius to control the spread of the shadow
+                                8.0, // Adjust the blur radius to control the spread of the shadow
                             spreadRadius: 0.0,
                           ),
                         ],
@@ -232,7 +233,7 @@ class EditProfile extends StatelessWidget {
                             offset: const Offset(
                                 0, 4), // Shadow is applied only downward
                             blurRadius:
-                            8.0, // Adjust the blur radius to control the spread of the shadow
+                                8.0, // Adjust the blur radius to control the spread of the shadow
                             spreadRadius: 0.0,
                           ),
                         ],
@@ -306,7 +307,7 @@ class EditProfile extends StatelessWidget {
                               padding: EdgeInsets.symmetric(horizontal: 8),
                               child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
@@ -423,7 +424,7 @@ class EditProfile extends StatelessWidget {
                         .contains(musicGeneres[index]);
                     return Container(
                       padding:
-                      EdgeInsets.only(left: 10.w, right: 10.w, top: 5.5.h),
+                          EdgeInsets.only(left: 10.w, right: 10.w, top: 5.5.h),
                       height: 28.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50.r),
@@ -455,14 +456,14 @@ class EditProfile extends StatelessWidget {
                 return controller.isLoading.value
                     ? CircularProgressIndicator()
                     : Text(
-                  'Save Information',
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
-                    color: VoidColors.whiteColor,
-                  ),
-                );
+                        'Save Information',
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.sp,
+                          color: VoidColors.whiteColor,
+                        ),
+                      );
               }),
               onPressed: () async {
                 await controller.editProfile();
@@ -481,11 +482,12 @@ class ProfilePreview extends StatelessWidget {
   });
 
   final UserController userController = Get.find();
+  final WebSocketController webSocketController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-          () => SingleChildScrollView(
+      () => SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.h).copyWith(bottom: 48.h),
           child: Column(
@@ -514,25 +516,31 @@ class ProfilePreview extends StatelessWidget {
               SizedBox(
                 height: 10.h,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/icons/coin.png',
-                    height: 20.r,
-                    width: 20.r,
-                  ),
-                  Text(
-                    userController.user.value.coins != null
-                        ? userController.user.value.coins.toString()
-                        : "0",
-                    style: GoogleFonts.manrope(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: VoidColors.blackColor,
+              GestureDetector(
+                onTap: () {
+                  print('This image was clicked');
+                  webSocketController.sendInit(userController.user.value.id);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/icons/coin.png',
+                      height: 20.r,
+                      width: 20.r,
                     ),
-                  ),
-                ],
+                    Text(
+                      userController.user.value.coins != null
+                          ? userController.user.value.coins.toString()
+                          : "0",
+                      style: GoogleFonts.manrope(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: VoidColors.blackColor,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 10.h,
