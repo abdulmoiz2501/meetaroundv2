@@ -6,11 +6,8 @@ import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
 import '../utils/constraints/text_strings.dart';
 
-
-Column homeHeaderWidget(List<Map<String,
-    String>> items, double itemWidth,
-    VoidCallback onTap,
-    String subTitle,
+Column homeHeaderWidget(List<Map<String, String>> items, double itemWidth,
+    VoidCallback onTap, String subTitle,
     {bool? suggested = false}) {
   final ScrollController _scrollController = ScrollController();
   int _currentItem = 0;
@@ -22,49 +19,49 @@ Column homeHeaderWidget(List<Map<String,
       curve: Curves.easeInOut,
     );
   }
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      SizedBox(height: 54.h,),
+      SizedBox(
+        height: 54.h,
+      ),
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 13.0.w),
-            child: Image.asset(VoidImages.secSplash,
+            child: Image.asset(
+              VoidImages.secSplash,
               height: 40.h,
-              width: 40.w,),
+              width: 40.w,
+            ),
           ),
-          Text(
-              VoidTexts.meetAround,
+          Text(VoidTexts.meetAround,
               style: GoogleFonts.poppins(
                 textStyle: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
                   color: VoidColors.blackColor,
                 ),
-              )
-          ),
+              )),
           Spacer(),
-          suggested! ?
-              Icon(Icons.person) : SizedBox(),
+          suggested! ? Icon(Icons.person) : SizedBox(),
           suggested ? Icon(Icons.more_vert) : SizedBox(),
-
         ],
       ),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 17.0.w, vertical: 15.0.h),
         child: Text(
             // VoidTexts.suggestPeople,
-          subTitle,
+            subTitle,
             style: GoogleFonts.poppins(
               textStyle: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
                 color: VoidColors.secondary,
               ),
-            )
-        ),
+            )),
       ),
       SizedBox(height: 8.0.h),
       Row(
@@ -78,16 +75,19 @@ Column homeHeaderWidget(List<Map<String,
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.0.w),
-              child: Image.asset(VoidImages.backArrow,
-                height: 22.h, width: 22.w,),
+              child: Image.asset(
+                VoidImages.backArrow,
+                height: 22.h,
+                width: 22.w,
+              ),
             ),
           ),
           Expanded(
             child: SizedBox(
               height: 86.h,
               child: ListView.builder(
-                // itemCount: 6,
-                  itemCount:  items.length,
+                  // itemCount: 6,
+                  itemCount: items.length,
                   controller: _scrollController,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
@@ -99,7 +99,7 @@ Column homeHeaderWidget(List<Map<String,
                           children: [
                             Expanded(
                               child: CircleAvatar(
-                                backgroundImage: AssetImage(
+                                backgroundImage: NetworkImage(
                                   // VoidImages.testImg
                                   items[index]['image']!,
                                 ),
@@ -107,7 +107,7 @@ Column homeHeaderWidget(List<Map<String,
                               ),
                             ),
                             Text(
-                              // 'David',
+                                // 'David',
                                 items[index]['name']!,
                                 style: GoogleFonts.poppins(
                                   textStyle: TextStyle(
@@ -115,8 +115,7 @@ Column homeHeaderWidget(List<Map<String,
                                     fontWeight: FontWeight.w400,
                                     color: VoidColors.blackColor,
                                   ),
-                                )
-                            ),
+                                )),
                           ],
                         ),
                       ),
@@ -133,8 +132,11 @@ Column homeHeaderWidget(List<Map<String,
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.0.w),
-              child: Image.asset(VoidImages.forwardArrow,
-                height: 22.h, width: 22.w,),
+              child: Image.asset(
+                VoidImages.forwardArrow,
+                height: 22.h,
+                width: 22.w,
+              ),
             ),
           )
         ],
@@ -143,13 +145,8 @@ Column homeHeaderWidget(List<Map<String,
   );
 }
 
-
-
-
-Column homeHeaderWidget2(List<Map<String,
-    String>> items, double itemWidth,
-    VoidCallback onTap,
-    String subTitle,
+Column homeHeaderWidget2(List<Map<String, String>> items, double itemWidth,
+    VoidCallback onTap, String subTitle,
     {bool? suggested = false}) {
   final ScrollController _scrollController = ScrollController();
   int _currentItem = 0;
@@ -161,51 +158,54 @@ Column homeHeaderWidget2(List<Map<String,
       curve: Curves.easeInOut,
     );
   }
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      SizedBox(height: 54.h,),
+      SizedBox(
+        height: 54.h,
+      ),
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 13.0.w),
-            child: Image.asset(VoidImages.secSplash,
+            child: Image.asset(
+              VoidImages.secSplash,
               height: 40.h,
-              width: 40.w,),
+              width: 40.w,
+            ),
           ),
-          Text(
-              VoidTexts.meetAround,
+          Text(VoidTexts.meetAround,
               style: GoogleFonts.poppins(
                 textStyle: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
                   color: VoidColors.blackColor,
                 ),
-              )
-          ),
+              )),
           Spacer(),
           // suggested! ?
-              SvgPicture.asset(
-                                              "assets/icons/frnd.svg",
-                                              height: 24.h,
-                                              width: 24.w,
-                                              colorFilter: ColorFilter.mode(
-                                                  VoidColors.secondary,
-                                                  BlendMode.srcIn),
-                                            ),
-                                            SizedBox(width: 5.w,),
-                                             SvgPicture.asset(
-                                              "assets/icons/more.svg",
-                                              height: 24.h,
-                                              width: 24.w,
-                                              colorFilter: ColorFilter.mode(
-                                                  VoidColors.secondary,
-                                                  BlendMode.srcIn),
-                                            ),
-                                            SizedBox(width: 18.w,),
-         
-
+          SvgPicture.asset(
+            "assets/icons/frnd.svg",
+            height: 24.h,
+            width: 24.w,
+            colorFilter:
+                ColorFilter.mode(VoidColors.secondary, BlendMode.srcIn),
+          ),
+          SizedBox(
+            width: 5.w,
+          ),
+          SvgPicture.asset(
+            "assets/icons/more.svg",
+            height: 24.h,
+            width: 24.w,
+            colorFilter:
+                ColorFilter.mode(VoidColors.secondary, BlendMode.srcIn),
+          ),
+          SizedBox(
+            width: 18.w,
+          ),
         ],
       ),
       Padding(
@@ -214,27 +214,25 @@ Column homeHeaderWidget2(List<Map<String,
           children: [
             Text(
                 // VoidTexts.suggestPeople,
-              "Top Picks to enjoy jamming:",
+                "Top Picks to enjoy jamming:",
                 style: GoogleFonts.poppins(
                   textStyle: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                     color: VoidColors.secondary,
                   ),
-                )
-            ),
+                )),
             Spacer(),
             Text(
                 // VoidTexts.suggestPeople,
-              "See all",
+                "See all",
                 style: GoogleFonts.poppins(
                   textStyle: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                     color: VoidColors.secondary,
                   ),
-                )
-            ),
+                )),
           ],
         ),
       ),
@@ -256,12 +254,12 @@ Column homeHeaderWidget2(List<Map<String,
           // ),
           Expanded(
             child: Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 10.w),
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: SizedBox(
                 height: 86.h,
                 child: ListView.builder(
-                  // itemCount: 6,
-                    itemCount:  items.length,
+                    // itemCount: 6,
+                    itemCount: items.length,
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
@@ -281,7 +279,7 @@ Column homeHeaderWidget2(List<Map<String,
                                 ),
                               ),
                               Text(
-                                // 'David',
+                                  // 'David',
                                   items[index]['name']!,
                                   style: GoogleFonts.poppins(
                                     textStyle: TextStyle(
@@ -289,8 +287,7 @@ Column homeHeaderWidget2(List<Map<String,
                                       fontWeight: FontWeight.w400,
                                       color: VoidColors.blackColor,
                                     ),
-                                  )
-                              ),
+                                  )),
                             ],
                           ),
                         ),
