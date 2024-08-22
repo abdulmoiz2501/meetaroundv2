@@ -78,8 +78,8 @@ class _GetUserLocationViewState extends State<GetUserLocationView> {
                   signUpController.loading.value = true;
                   try {
                     await signUpController.getCurrentLocation();
-                    await signUpController.signUp();
-                    Get.offAllNamed(Routes.SIGN_IN);
+                    // await signUpController.signUp();
+                    // Get.offAllNamed(Routes.SIGN_IN);
                   } catch (e) {
                     Get.snackbar('Error', e.toString());
                   } finally {

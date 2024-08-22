@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:scratch_project/app/modules/JammingScreen/views/jamming_in_progress_view.dart';
 
 import '../modules/ChatDetailScreen/bindings/chat_detail_screen_binding.dart';
 import '../modules/ChatDetailScreen/views/chat_detail_screen_view.dart';
@@ -185,5 +186,10 @@ class AppPages {
       page: () => const ResetPasswordView(),
       binding: ResetPasswordBinding(),
     ),
+    // GetPage(
+    //   name: _Paths.JAMMING_INPROGRESS,
+    //   page: () => const JammingInProgressView(),
+    //   // binding: JammingScreenBinding(),
+    // ),
   ];
 }

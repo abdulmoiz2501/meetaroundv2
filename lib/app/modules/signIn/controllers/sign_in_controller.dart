@@ -1,6 +1,7 @@
 import 'dart:convert'; // For jsonEncode and jsonDecode
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:scratch_project/app/controllers/user_controller.dart';
@@ -24,6 +25,7 @@ class SignInController extends GetxController {
   var latitude = 0.0.obs;
   // var longitude = 0.0.obs;
   var webSocketResponse = ''.obs;
+  final box = GetStorage();
 
   Future<void> signIn(String email, String password) async {
     // Validate if any fields are empty
@@ -79,6 +81,8 @@ class SignInController extends GetxController {
         userController.token.value = token.value;
         print('///done with the token');
         userController.user.value = UserModel.fromJson(data['data']);
+        // box.write('token', token.value);
+
         print('///done with the user model');
         print("***********************");
         print(responseData);

@@ -30,6 +30,7 @@ abstract class Routes {
   static const SERVICES = _Paths.SERVICES;
   static const SEARCH_SCREEN = _Paths.SEARCH_SCREEN;
   static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
+  // static const JAMMING_INPROGRESS = _Paths.JAMMING_INPROGRESS;
 }
 
 abstract class _Paths {
@@ -61,4 +62,5 @@ abstract class _Paths {
   static const SERVICES = '/services';
   static const SEARCH_SCREEN = '/search-screen';
   static const RESET_PASSWORD = '/reset-password';
+  // static const JAMMING_INPROGRESS = '/jamming-screen/jamming-in-progress';
 }

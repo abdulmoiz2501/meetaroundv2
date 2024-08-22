@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as dtp;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,8 +26,9 @@ class _BirthDateViewState extends State<BirthDateView> {
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   Color hintTextColor = VoidColors.darkGrey;
 
+
   void _showDatePicker() {
-    DatePicker.showDatePicker(
+    dtp.DatePicker.showDatePicker(
       context,
       showTitleActions: true,
       minTime: DateTime(1900, 1, 1),
@@ -38,9 +39,43 @@ class _BirthDateViewState extends State<BirthDateView> {
         });
       },
       currentTime: DateTime.now(),
-      locale: LocaleType.en,
+      locale: dtp.LocaleType.en,
+      theme: const dtp.DatePickerTheme(
+        backgroundColor: Colors.white,
+        // headerColor: Colors.blue,
+        itemStyle: TextStyle(
+          color:  VoidColors.blackColor,
+          fontWeight: FontWeight.w500,
+          fontSize: 18,
+        ),
+        doneStyle: TextStyle(
+          color: VoidColors.secondary,
+          fontSize: 16,
+          fontWeight: FontWeight.w400
+        ),
+        cancelStyle: TextStyle(
+          color: VoidColors.secondary,
+          fontSize: 16,
+            fontWeight: FontWeight.w400
+        ),
+      ),
     );
   }
+  // void _showDatePicker() {
+  //   DatePicker.showDatePicker(
+  //     context,
+  //     showTitleActions: true,
+  //     minTime: DateTime(1900, 1, 1),
+  //     maxTime: DateTime.now(),
+  //     onConfirm: (date) {
+  //       setState(() {
+  //         signUpController.dateOfBirthController.text = "${date.day}/${date.month}/${date.year}";
+  //       });
+  //     },
+  //     currentTime: DateTime.now(),
+  //     locale: LocaleType.en,
+  //   );
+  // }
 
   int _calculateAge(DateTime selectedDate) {
     DateTime currentDate = DateTime.now();

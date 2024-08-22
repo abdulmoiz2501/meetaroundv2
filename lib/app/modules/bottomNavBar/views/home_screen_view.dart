@@ -233,6 +233,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                     return GoogleMap(
                       compassEnabled: false,
                       myLocationButtonEnabled: false,
+                      zoomControlsEnabled: false,
                       onMapCreated: _onMapCreated,
                       initialCameraPosition: CameraPosition(
                         target: locationController.currentPosition.value,

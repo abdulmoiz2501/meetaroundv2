@@ -150,18 +150,23 @@ class SignupFormScreenView extends GetView<SignUpController> {
                 SizedBox(height: 20.0.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.0.w),
-                  child: CustomButton(
-                    text: 'Sign up',
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        if (signUpController.accept.value) {
-                          signUpController.emailVerify();
-                        } else {
-                          _showErrorSnackbar('Accept Terms and Conditions');
-                        }
-                      }
-                    },
+                  child: Obx(() => controller.loading.value
+                      ? CustomButtonWithLoader(
                     borderRadius: 24.r,
+                  )
+                     : CustomButton(
+                      text: 'Sign up',
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          if (signUpController.accept.value) {
+                            signUpController.emailVerify();
+                          } else {
+                            _showErrorSnackbar('Accept Terms and Conditions');
+                          }
+                        }
+                      },
+                      borderRadius: 24.r,
+                    ),
                   ),
                 ),
                 SizedBox(height: 15.0.h),
