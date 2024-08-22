@@ -81,7 +81,7 @@ class SignInController extends GetxController {
         userController.token.value = token.value;
         print('///done with the token');
         userController.user.value = UserModel.fromJson(data['data']);
-        // box.write('token', token.value);
+        box.write('token', token.value);
 
         print('///done with the user model');
         print("***********************");
