@@ -36,7 +36,7 @@ class PastInterectionsView extends GetView<PastInterectionsController> {
           ),
         ),
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: VoidColors.primary,
             /*gradient: LinearGradient(
               colors: [VoidColors.primary, VoidColors.secondary],
@@ -47,7 +47,7 @@ class PastInterectionsView extends GetView<PastInterectionsController> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [VoidColors.primary, VoidColors.secondary],
             begin: Alignment.topCenter,

@@ -8,128 +8,128 @@ void showCustomPopup({
   required BuildContext context,
   required String headingText,
   required String subText,
-  String subText2="",
+  String subText2 = "",
   required String buttonText,
   required String belowButtonText,
   required VoidCallback onButtonPressed,
   required VoidCallback onBelowButtonPressed,
   required var height,
- 
 }) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        title: Center(
-          child: Text(
-            headingText,
-           style: GoogleFonts.poppins(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Center(
+            child: Text(
+              headingText,
+              style: GoogleFonts.poppins(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.w400,
-                  color: VoidColors.blackColor  
-                ),
-          ),
-        ),
-        content:Padding(
-          padding:  EdgeInsets.all(0),
-          child: SizedBox(
-            height:  height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-               
-                SizedBox(height: 10.h,),
-                 Column(
-                   children: [
-                     Text(subText,style: GoogleFonts.poppins(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: VoidColors.lightGrey1  
-                                   ),),
-                                    Text(subText2,style: GoogleFonts.poppins(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: VoidColors.lightGrey1  
-                                   ),),
-                   ],
-                 ),
-                 SizedBox(height: 10.h,),
-                 SizedBox(
-  width: double.infinity, // Set the desired width here
-  child: ElevatedButton(
-    onPressed: () {
-      onButtonPressed();
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: VoidColors.secondary, // Set the background color to pink
-      elevation: 0
-    ),
-    child: Text(
-      buttonText,
-      style: GoogleFonts.poppins(
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w400,
-        color: VoidColors.whiteColor,
-      ),
-    ),
-  ),
-)
-,
-                 SizedBox(height: 10.h,),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                                onPressed: () {
-                  onBelowButtonPressed;
-                                },
-                                style: ElevatedButton.styleFrom(
-                                backgroundColor: VoidColors.whiteColor, // Set the background color to pink
-                                elevation: 0
-                                ),
-                                child: Text(
-                  belowButtonText,
-                  style: GoogleFonts.poppins(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w700,
-                    color: VoidColors.lightGrey1,
-                  ),
-                                ),
-                              ),
-                )
-            
-            
-              ],
+                  color: VoidColors.blackColor),
             ),
           ),
-        )
-    
-      );
+          content: Padding(
+            padding: EdgeInsets.all(0),
+            child: SizedBox(
+              height: height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        subText,
+                        style: GoogleFonts.poppins(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
+                            color: VoidColors.lightGrey1),
+                      ),
+                      Text(
+                        subText2,
+                        style: GoogleFonts.poppins(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
+                            color: VoidColors.lightGrey1),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  SizedBox(
+                    width: double.infinity, // Set the desired width here
+                    child: ElevatedButton(
+                      onPressed: () {
+                        onButtonPressed();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: VoidColors.secondary,
+                          // Set the background color to pink
+                          elevation: 0),
+                      child: Text(
+                        buttonText,
+                        style: GoogleFonts.poppins(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                          color: VoidColors.whiteColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        onBelowButtonPressed;
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: VoidColors.whiteColor,
+                          // Set the background color to pink
+                          elevation: 0),
+                      child: Text(
+                        belowButtonText,
+                        style: GoogleFonts.poppins(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w700,
+                          color: VoidColors.lightGrey1,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ));
     },
   );
 }
-
-
 
 void showCustomBottomSheet({
   required BuildContext context,
   required String headingText,
   required String subText,
-  required String subText2 ,
- required String subText3 ,
-  required String subText4 ,
-   required String subText5 ,
-    required String subText6 ,
-     required String smallSubText ,
+  required String subText2,
+  required String subText3,
+  required String subText4,
+  required String subText5,
+  required String subText6,
+  required String smallSubText,
   required String buttonText,
- // required String belowButtonText,
+  // required String belowButtonText,
   required VoidCallback onButtonPressed,
- // required VoidCallback onBelowButtonPressed,
- // required double height, // Changed to double for height
+  // required VoidCallback onBelowButtonPressed,
+  // required double height, // Changed to double for height
 }) {
   showModalBottomSheet(
     context: context,
@@ -174,67 +174,66 @@ void showCustomBottomSheet({
                 ),
 
                 SizedBox(height: 5.h),
-                  Text(
-                    smallSubText,
-                    style: GoogleFonts.poppins(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: VoidColors.lightGrey1,
-                    ),
-                    //textAlign: TextAlign.center,
+                Text(
+                  smallSubText,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                    color: VoidColors.lightGrey1,
                   ),
-                   SizedBox(height: 15.h),
-                  Text(
-                    subText2,
-                    style: GoogleFonts.poppins(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: VoidColors.blackColor,
-                    ),
-                   // textAlign: TextAlign.center,
+                  //textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 15.h),
+                Text(
+                  subText2,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400,
+                    color: VoidColors.blackColor,
                   ),
-                    SizedBox(height: 15.h),
-                   //SizedBox(height: 5.h),
-                  Text(
-                    subText3,
-                    style: GoogleFonts.poppins(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: VoidColors.blackColor,
-                    ),
-                    textAlign: TextAlign.center,
+                  // textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 15.h),
+                //SizedBox(height: 5.h),
+                Text(
+                  subText3,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400,
+                    color: VoidColors.blackColor,
                   ),
-                    SizedBox(height: 15.h),
-                  Text(
-                    subText4,
-                    style: GoogleFonts.poppins(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: VoidColors.blackColor,
-                    ),
-                   // textAlign: TextAlign.center,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 15.h),
+                Text(
+                  subText4,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400,
+                    color: VoidColors.blackColor,
                   ),
-                     SizedBox(height: 15.h),
-                  Text(
-                    subText5,
-                    style: GoogleFonts.poppins(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: VoidColors.blackColor,
-                    ),
-                   // textAlign: TextAlign.center,
+                  // textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 15.h),
+                Text(
+                  subText5,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400,
+                    color: VoidColors.blackColor,
                   ),
-                     SizedBox(height: 15.h),
-                  Text(
-                    subText6,
-                    style: GoogleFonts.poppins(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: VoidColors.blackColor,
-                    ),
-                    //textAlign: TextAlign.center,
+                  // textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 15.h),
+                Text(
+                  subText6,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w400,
+                    color: VoidColors.blackColor,
                   ),
-
+                  //textAlign: TextAlign.center,
+                ),
               ],
             ),
             SizedBox(height: 10.h),
@@ -256,7 +255,6 @@ void showCustomBottomSheet({
                 ),
               ),
             ),
-           
           ],
         ),
       );

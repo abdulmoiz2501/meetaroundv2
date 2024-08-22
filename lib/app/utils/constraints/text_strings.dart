@@ -51,4 +51,6 @@ class VoidTexts {
   static const meetAround = "MeetAround";
   static const suggestPeople = "Suggested People";
   // static const topPicks = "Top Picks to enjoy jamming:";
+  static const jammingInProgress = "Your Jamming session is in progress.. Please wait a while";
+  static const pleaseWaitToAccept = "Please wait for other user to accept the request";
 }

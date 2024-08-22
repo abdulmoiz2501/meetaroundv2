@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -51,8 +53,11 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
             stream: webSocketController.messageStream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                final message = snapshot.data!;
-                print("Message in BottomNavBarView: $message");
+                final message = jsonDecode(snapshot.data.toString());
+                print("Message in BottomNavBarView: ${message}");
+                if (message['type'] == 'request') {
+                  print('you have a request');
+                }
               }
               return Obx(
                 () => Row(
