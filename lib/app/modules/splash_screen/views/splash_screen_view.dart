@@ -26,7 +26,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
   void initState() {
     Future.delayed(const Duration(seconds: 2), () {
       // Get.offAll(()=>SecondSplashView());
-      Get.offAll(JammingInProgressView(isSender: false,));
+      Get.offAll(JammingInProgressView(isSender: true,));
     });
 
   }

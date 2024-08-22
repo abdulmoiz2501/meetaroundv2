@@ -36,12 +36,14 @@ class _JammingInProgressViewState extends State<JammingInProgressView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height:250 .h,
-                  width: 250.w,
-                  child: Lottie.asset('assets/icons/UQejRQZqHg.json'),
+                Expanded(
+                  child: SizedBox(
+                    height:100 .h,
+                    width: 100.w,
+                    child: Lottie.asset('assets/icons/UQejRQZqHg.json'),
+                  ),
                 ),
-                40.0.verticalSpace,
+                // 40.0.verticalSpace,
                 Center(
                   child: Text(
                     textAlign: TextAlign.center,
