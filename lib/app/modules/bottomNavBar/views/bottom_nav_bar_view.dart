@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:scratch_project/app/controllers/user_controller.dart';
 import 'package:scratch_project/app/controllers/websocket_controller.dart';
 import 'package:scratch_project/app/modules/PastInterections/views/past_interections_view.dart';
 import 'package:scratch_project/app/modules/ProfileScreen/views/profile_screen_view.dart';
@@ -12,6 +13,7 @@ import 'package:scratch_project/app/modules/bottomNavBar/views/home_screen_view.
 import 'package:scratch_project/app/routes/app_pages.dart';
 import 'package:scratch_project/app/utils/constraints/text_strings.dart';
 import 'package:scratch_project/app/widgets/homeHeaderWidget.dart';
+import 'package:scratch_project/app/widgets/jamming_request_alertBox.dart';
 
 import '../../../utils/constraints/colors.dart';
 import '../../../utils/constraints/image_strings.dart';
@@ -24,6 +26,7 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
       Get.put(BottomNavBarController());
   final WebSocketController webSocketController =
       Get.find<WebSocketController>();
+  final UserController userController = Get.find();
 
   final List<Widget> _pages = [
     HomeScreenView(),
@@ -39,16 +42,8 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
       backgroundColor: VoidColors.whiteColor,
       resizeToAvoidBottomInset: false,
       extendBody: true,
-      body: Obx(
-        () => AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: _pages[bottomNavBarController.selectedIndex.value]),
-      ),
-      bottomNavigationBar: Container(
-        height: 50.h,
-        decoration: const BoxDecoration(
-          color: VoidColors.bottomNavColor,
-        ),
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
         child: StreamBuilder(
             stream: webSocketController.messageStream,
             builder: (context, snapshot) {
@@ -56,28 +51,55 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
                 final message = jsonDecode(snapshot.data.toString());
                 print("Message in BottomNavBarView: ${message}");
                 if (message['type'] == 'request') {
-                  print('you have a request');
+                  final x = message['userId'].toString();
+                  print('The user id is: $x');
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showJammingRequestDialog(
+                      name: 'name',
+                      onReject: () {
+                        webSocketController.sendJammingResponse(
+                            userController.user.value.id.toString(), 'reject');
+                      },
+                      onAccept: () {
+                        webSocketController.sendJammingResponse(
+                            userController.user.value.id.toString(), 'accept');
+                        Get.back();
+                      },
+                    );
+                  });
                 }
               }
               return Obx(
-                () => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _buildNavItem(
-                        VoidImages.homeIcon, 0, bottomNavBarController),
-                    _buildNavItem(
-                        VoidImages.favouriteIcon, 1, bottomNavBarController),
-                    _buildNavItem(
-                        VoidImages.searchIcon, 2, bottomNavBarController),
-                    _buildNavItem(
-                        VoidImages.msgIcon, 3, bottomNavBarController),
-                    _buildNavItem(
-                        VoidImages.personIcon, 4, bottomNavBarController),
-                  ],
-                ),
-              );
+                  () => _pages[bottomNavBarController.selectedIndex.value]);
             }),
+      ),
+      bottomNavigationBar: Container(
+        height: 50.h,
+        decoration: const BoxDecoration(
+          color: VoidColors.bottomNavColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Obx(() =>
+                _buildNavItem(VoidImages.homeIcon, 0, bottomNavBarController)),
+            Obx(
+              () => _buildNavItem(
+                  VoidImages.favouriteIcon, 1, bottomNavBarController),
+            ),
+            Obx(
+              () => _buildNavItem(
+                  VoidImages.searchIcon, 2, bottomNavBarController),
+            ),
+            Obx(() =>
+                _buildNavItem(VoidImages.msgIcon, 3, bottomNavBarController)),
+            Obx(
+              () => _buildNavItem(
+                  VoidImages.personIcon, 4, bottomNavBarController),
+            ),
+          ],
+        ),
       ),
     );
   }

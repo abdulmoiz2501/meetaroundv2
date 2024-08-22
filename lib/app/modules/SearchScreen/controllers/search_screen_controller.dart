@@ -34,7 +34,8 @@ class SearchScreenController extends GetxController {
   Future<void> fetchUsers() async {
     final userId = signInController.id.value;
     final token = signInController.token.value;
-    final url = 'https://meet-around-apis-production.up.railway.app/api/user/getUsers?userId=$userId';
+    final url =
+        'https://meet-around-apis-production.up.railway.app/api/user/getUsers?userId=$userId';
 
     try {
       isLoading(true);
@@ -54,7 +55,8 @@ class SearchScreenController extends GetxController {
 
         calculateDistancesAndAddressesForUsers();
       } else {
-        Get.snackbar('Error', 'Failed to fetch users: ${response.reasonPhrase}');
+        Get.snackbar(
+            'Error', 'Failed to fetch users: ${response.reasonPhrase}');
       }
     } catch (e) {
       Get.snackbar(
@@ -123,27 +125,13 @@ class SearchScreenController extends GetxController {
 
   Future<String> getAddressFromLatLng(double latitude, double longitude) async {
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(latitude, longitude);
       Placemark place = placemarks[0];
       return "${place.country}, ${place.locality}}";
     } catch (e) {
       return "Unknown location";
     }
-  }
-
-  void showJammingRequestDialog(int requestingUserId) {
-    Get.defaultDialog(
-      title: "Jamming Request",
-      middleText: "User $requestingUserId wants to jam with you. Do you want to accept?",
-      textCancel: "Reject",
-      textConfirm: "Accept",
-      onCancel: () {
-       // Get.find<JammingScreenController>().sendJammingResponse(requestingUserId, 'reject');
-      },
-      onConfirm: () {
-        //Get.find<JammingScreenController>().sendJammingResponse(requestingUserId, 'accept');
-      },
-    );
   }
 
   void toggleChatMusic() {

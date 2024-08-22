@@ -30,7 +30,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   GoogleMapController? _controller;
   final LocationController locationController = Get.put(LocationController());
   final UserController userController = Get.put(UserController());
-  late WebSocketChannel channel;
+  // late WebSocketChannel channel;
 
   bool _showLoader = true;
 
@@ -45,9 +45,11 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       });
     });
 
-    Get.lazyPut<JammingScreenController>(() => JammingScreenController(userId: userController.user.value.id));
+    Get.lazyPut<JammingScreenController>(
+        () => JammingScreenController(userId: userController.user.value.id));
 
-    final SearchScreenController searchScreenController = Get.put(SearchScreenController());
+    final SearchScreenController searchScreenController =
+        Get.put(SearchScreenController());
     //connectWebSocket();
 
     locationController.addListener(() {
@@ -95,18 +97,24 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
       // Only include users within the radius and not seen before
       final isWithinRadius = distance <= radiusInMeters;
-      final isUniqueUser = seenIds.add(user.id.toString()); // Returns false if already in the set
+      final isUniqueUser = seenIds
+          .add(user.id.toString()); // Returns false if already in the set
 
       return isWithinRadius && isUniqueUser;
     }).toList();
   }
 
-  double _calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+  double _calculateDistance(
+      double lat1, double lon1, double lat2, double lon2) {
     const R = 6371000; // Radius of the Earth in meters
     final dLat = (lat2 - lat1) * (3.141592653589793 / 180);
     final dLon = (lon2 - lon1) * (3.141592653589793 / 180);
-    final a =
-        0.5 - cos(dLat) / 2 + cos(lat1 * (3.141592653589793 / 180)) * cos(lat2 * (3.141592653589793 / 180)) * (1 - cos(dLon)) / 2;
+    final a = 0.5 -
+        cos(dLat) / 2 +
+        cos(lat1 * (3.141592653589793 / 180)) *
+            cos(lat2 * (3.141592653589793 / 180)) *
+            (1 - cos(dLon)) /
+            2;
 
     return R * 2 * asin(sqrt(a));
   }
@@ -116,14 +124,10 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     final filteredUsers = _filterUsersWithinRadius();
 
     for (var user in filteredUsers) {
-      ImageConfiguration imageConfiguration = createLocalImageConfiguration(
-          context,
-          size: const Size(10.0, 10.0)
-      );
+      ImageConfiguration imageConfiguration =
+          createLocalImageConfiguration(context, size: const Size(10.0, 10.0));
       final BitmapDescriptor icon = await BitmapDescriptor.fromAssetImage(
-          imageConfiguration,
-          "assets/icons/markercoin.png"
-      );
+          imageConfiguration, "assets/icons/markercoin.png");
 
       markers.add(
         Marker(
@@ -142,7 +146,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
   @override
   void dispose() {
-    channel.sink.close();
+    // channel.sink.close();
     super.dispose();
   }
 
@@ -164,7 +168,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
         child: Column(
           children: [
             if (_showLoader)
-            // Show shimmer effect while waiting for 3 seconds
+              // Show shimmer effect while waiting for 3 seconds
               Shimmer.fromColors(
                 baseColor: Colors.grey[300]!,
                 highlightColor: Colors.grey[100]!,
@@ -188,14 +192,17 @@ class _HomeScreenViewState extends State<HomeScreenView> {
               )
             else
               homeHeaderWidget(
-                filteredUsers.map((user) => {
-                  'image': user.profilePicture != null && user.profilePicture!.isNotEmpty
-                      ? user.profilePicture!
-                      : VoidImages.testImg,
-                  'name': user.name ?? 'Unknown',
-                }).toList() as List<Map<String, String>>,
+                filteredUsers
+                    .map((user) => {
+                          'image': user.profilePicture != null &&
+                                  user.profilePicture!.isNotEmpty
+                              ? user.profilePicture!
+                              : VoidImages.testImg,
+                          'name': user.name ?? 'Unknown',
+                        })
+                    .toList() as List<Map<String, String>>,
                 100.0,
-                    () {
+                () {
                   Get.toNamed(Routes.SUGGESTED_PEOPLE);
                 },
                 VoidTexts.suggestPeople,
@@ -204,7 +211,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
               height: 20.h,
             ),
             Obx(
-                  () => Expanded(
+              () => Expanded(
                 child: FutureBuilder<Set<Marker>>(
                   future: _createMarkers(),
                   builder: (context, snapshot) {
@@ -245,8 +252,10 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                           circleId: CircleId('currentLocation'),
                           center: locationController.currentPosition.value,
                           radius: 300.r, // Set your desired radius
-                          fillColor: Colors.black.withOpacity(0.2), // Black color with opacity
-                          strokeColor: Colors.black.withOpacity(0.2), // Border color
+                          fillColor: Colors.black
+                              .withOpacity(0.2), // Black color with opacity
+                          strokeColor:
+                              Colors.black.withOpacity(0.2), // Border color
                           strokeWidth: 0, // Border width
                         ),
                       ]),
