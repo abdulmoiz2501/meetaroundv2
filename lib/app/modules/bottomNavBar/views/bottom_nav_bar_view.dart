@@ -45,7 +45,7 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         child: StreamBuilder(
-            stream: webSocketController.messageStream,
+            stream: webSocketController.messageStream.asBroadcastStream(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final message = jsonDecode(snapshot.data.toString());

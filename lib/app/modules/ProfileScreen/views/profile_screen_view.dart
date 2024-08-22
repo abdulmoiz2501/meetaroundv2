@@ -424,7 +424,7 @@ class EditProfile extends StatelessWidget {
                         .contains(musicGeneres[index]);
                     return Container(
                       padding:
-                          EdgeInsets.only(left: 10.w, right: 10.w, top: 5.5.h),
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 7.h),
                       height: 28.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50.r),
@@ -674,6 +674,7 @@ class ProfilePreview extends StatelessWidget {
                   );
                 }),
               ),
+              30.verticalSpace,
             ],
           ),
         ),
