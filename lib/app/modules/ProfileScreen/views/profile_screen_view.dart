@@ -424,7 +424,7 @@ class EditProfile extends StatelessWidget {
                         .contains(musicGeneres[index]);
                     return Container(
                       padding:
-                          EdgeInsets.only(left: 10.w, right: 10.w, top: 5.5.h),
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 7.h),
                       height: 28.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50.r),
@@ -502,14 +502,21 @@ class ProfilePreview extends StatelessWidget {
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100.r),
-                    child: Image.network(
+                  child: CircleAvatar(
+                    radius: 40.0.r,
+                    backgroundImage: NetworkImage(
                       userController.user.value.profilePicture.isNotEmpty
                           ? userController.user.value.profilePicture
                           : noImagePlaceHolder,
-                      fit: BoxFit.cover,
+                      // fit: BoxFit.cover,
                     ),
+                    // borderRadius: BorderRadius.circular(100.r),
+                    // child: Image.network(
+                    //   userController.user.value.profilePicture.isNotEmpty
+                    //       ? userController.user.value.profilePicture
+                    //       : noImagePlaceHolder,
+                    //   fit: BoxFit.cover,
+                    // ),
                   ),
                 ),
               ),
@@ -603,14 +610,17 @@ class ProfilePreview extends StatelessWidget {
                 height: 20.h,
               ),
               Center(
-                child: Container(
-                    height: 272.h,
-                    width: 272.w,
-                    child: Image.network(
-                      userController.user.value.profilePicture.isNotEmpty
-                          ? userController.user.value.profilePicture
-                          : noImagePlaceHolder,
-                      fit: BoxFit.cover,
+                child: SizedBox(
+                    height: 278.h,
+                    width: 339.w,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0.r),
+                      child: Image.network(
+                        userController.user.value.profilePicture.isNotEmpty
+                            ? userController.user.value.profilePicture
+                            : noImagePlaceHolder,
+                        fit: BoxFit.cover,
+                      ),
                     )),
               ),
               SizedBox(
@@ -637,9 +647,9 @@ class ProfilePreview extends StatelessWidget {
                       bool isSelected = userController.user.value.interests
                           .contains(musicGeners[index]);
                       return Container(
-                        padding: EdgeInsets.only(
-                            left: 10.w, right: 10.w, top: 5.5.h),
-                        height: 28.h,
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10.w, horizontal: 10.w,),
+                        // height: 28.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50.r),
                           color: isSelected
@@ -664,6 +674,7 @@ class ProfilePreview extends StatelessWidget {
                   );
                 }),
               ),
+              30.verticalSpace,
             ],
           ),
         ),

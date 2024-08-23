@@ -12,8 +12,8 @@ void main() async {
   // }
   // Initialize GetStorage
   await GetStorage.init();
-  // final box = GetStorage();
-  // final storedToken = box.read('token');
+  final box = GetStorage();
+  final storedToken = box.read('token');
 
   runApp(
     ScreenUtilInit(
@@ -24,8 +24,8 @@ void main() async {
         return GetMaterialApp(
           title: "Application",
           debugShowCheckedModeBanner: false,
-          initialRoute: AppPages.SPLASH_SCREEN,
-          // initialRoute: storedToken != null ? Routes.BOTTOM_NAV_BAR : AppPages.SPLASH_SCREEN,
+          // initialRoute: AppPages.SPLASH_SCREEN,
+          initialRoute: storedToken != null ? Routes.BOTTOM_NAV_BAR : AppPages.SPLASH_SCREEN,
           getPages: AppPages.routes,
         );
       },

@@ -32,16 +32,21 @@ class SuggestedPeopleView extends GetView {
         automaticallyImplyLeading: false,
         title: Row(
           children: [
-            Container(
-              height: 32.h,
-              width: 32.w,
-              child: Center(
-                child: SvgPicture.asset(
-                  "assets/icons/left_arrow.svg",
-                  height: 16.h,
-                  width: 8.w,
-                  colorFilter:
-                      ColorFilter.mode(VoidColors.blackColor, BlendMode.srcIn),
+            GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: SizedBox(
+                height: 32.h,
+                width: 32.w,
+                child: Center(
+                  child: SvgPicture.asset(
+                    "assets/icons/left_arrow.svg",
+                    height: 16.h,
+                    width: 8.w,
+                    colorFilter:
+                        ColorFilter.mode(VoidColors.blackColor, BlendMode.srcIn),
+                  ),
                 ),
               ),
             ),
@@ -126,11 +131,12 @@ class SuggestedPeopleView extends GetView {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100.r),
-                          child: Image.asset(
+                        child: CircleAvatar(
+                          radius: 40.0.r,
+                          // borderRadius: BorderRadius.circular(100.r),
+                          backgroundImage:  AssetImage(
                             "assets/images/profile.png",
-                            fit: BoxFit.cover,
+                            // fit: BoxFit.cover,
                           ),
                         ),
                       ),
@@ -345,10 +351,10 @@ class SuggestedPeopleView extends GetView {
                           bool isSelected =
                               controller.selectedMusicGenres.contains(index);
                           return Container(
-                            padding: EdgeInsets.only(
-                                left: 10.w, right: 10.w, top: 5.5.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.w, vertical: 7.w,),
                             height: 28.h,
-                            width: 62.w,
+                            // width: 62.w,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50.r),
                               color: isSelected
@@ -358,16 +364,14 @@ class SuggestedPeopleView extends GetView {
                                 color: VoidColors.blackColor,
                               ),
                             ),
-                            child: Center(
-                              child: Text(
-                                musicGeners2[index],
-                                style: GoogleFonts.poppins(
-                                  fontSize: 10.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: isSelected
-                                      ? VoidColors.whiteColor
-                                      : VoidColors.blackColor,
-                                ),
+                            child: Text(
+                              musicGeners2[index],
+                              style: GoogleFonts.poppins(
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w400,
+                                color: isSelected
+                                    ? VoidColors.whiteColor
+                                    : VoidColors.blackColor,
                               ),
                             ),
                           );
