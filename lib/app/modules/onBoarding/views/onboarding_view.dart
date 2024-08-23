@@ -67,36 +67,39 @@ class OnBoardingView extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: PageView.builder(
-                controller: pageController,
-                onPageChanged: (index) {
-                  currentIndex.value = index;
-                },
-                itemCount: onBoardingPages.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Stack(
-                    children: [
-                      onBoardingPages[index],
-                      index == 2 ? SizedBox() : Positioned(
-                        top: 40.h,
-                        right: 20.w,
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.offAll(() => SignUpView());
-                          },
-                          child: Text(
-                            'Skip',
-                            style: GoogleFonts.poppins(
-                              fontSize: 15.sp,
-                              color: VoidColors.whiteColor,
-                              fontWeight: FontWeight.w600,
-                            ),
+              child: Stack(
+                children: [
+                  PageView.builder(
+                    controller: pageController,
+                    onPageChanged: (index) {
+                      currentIndex.value = index;
+                    },
+                    itemCount: onBoardingPages.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return onBoardingPages[index];
+                    },
+                  ),
+                  Obx(() =>
+                    currentIndex.value == 2 ? SizedBox() : Positioned(
+                      top: 50.h,
+                      right: 25.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.offAll(() => SignUpView());
+                        },
+                        child: Text(
+                          'Skip',
+                          style: GoogleFonts.poppins(
+                            fontSize: 15.sp,
+                            color: VoidColors.whiteColor,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
-                    ],
-                  );
-                },
+                    ),
+                  )
+
+                ],
               ),
             ),
             Padding(

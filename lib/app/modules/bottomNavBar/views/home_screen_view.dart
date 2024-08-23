@@ -204,7 +204,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                       .toList() as List<Map<String, String>>,
                   100.0,
                   () {
-                    Get.toNamed(Routes.SUGGESTED_PEOPLE);
+                    // Get.toNamed(Routes.SUGGESTED_PEOPLE);
                   },
                   VoidTexts.suggestPeople,
                 );

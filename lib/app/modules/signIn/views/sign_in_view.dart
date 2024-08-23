@@ -28,9 +28,19 @@ class SignInView extends GetView<SignInController> {
         child: Column(
           children: [
             SizedBox(height: 60.0.h),
-            Image.asset(VoidImages.secSplash, height: 100.h, width: 100.w),
+            Image.asset(VoidImages.coloredAppLogo, height: 100.h, width: 100.w),
+            SizedBox(height: 5.0.h),
+            Text(
+              VoidTexts.danceAround,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                fontSize: 18.sp,
+                color: VoidColors.secondary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             Padding(
-              padding: EdgeInsets.only(top: 20.0.h, bottom: 25.0.h),
+              padding: EdgeInsets.only(top: 25.0.h, bottom: 10.0.h),
               child: Text(
                 VoidTexts.signUpTitle,
                 textAlign: TextAlign.center,
@@ -41,7 +51,7 @@ class SignInView extends GetView<SignInController> {
                 ),
               ),
             ),
-            SizedBox(height: 40.0.h),
+            SizedBox(height: 35.0.h),
             CustomTextFormField(
               controller: _controller.emailController,
               obscureText: false,

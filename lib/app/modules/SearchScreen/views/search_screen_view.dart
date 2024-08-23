@@ -52,26 +52,26 @@ class _SearchScreenState extends State<SearchScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Top Picks to enjoy jamming:",
+                      "Top Picks to enjoy jamming",
                       style: GoogleFonts.poppins(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
                         color: VoidColors.blackColor,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        // See All
-                      },
-                      child: Text(
-                        "See All",
-                        style: GoogleFonts.poppins(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                          color: VoidColors.redColor,
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     // See All
+                    //   },
+                    //   child: Text(
+                    //     "See All",
+                    //     style: GoogleFonts.poppins(
+                    //       fontSize: 14.sp,
+                    //       fontWeight: FontWeight.w500,
+                    //       color: VoidColors.redColor,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -101,27 +101,43 @@ class _SearchScreenState extends State<SearchScreen> {
                               children: [
                                 Stack(
                                   children: [
-                                    Container(
-                                      height: 60.63.h,
-                                      width: 60.63.w,
-                                      decoration:
-                                          BoxDecoration(shape: BoxShape.circle),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100.r),
-                                        child: Image.network(
-                                          user.profilePicture,
-                                          fit: BoxFit.cover,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Image.asset(
-                                              'assets/images/noimage.png',
-                                              fit: BoxFit.cover,
-                                            );
-                                          },
-                                        ),
-                                      ),
+                                    CircleAvatar(
+                                      radius: 33.31.r, // Half of the height/width to achieve the same size
+                                      backgroundImage: user.profilePicture.isEmpty ? AssetImage('assets/images/noimage.png') :
+                                      NetworkImage(user.profilePicture),
+                                      onBackgroundImageError: (error, stackTrace) {
+                                        AssetImage('assets/images/noimage.png');
+                                      },
+                                      backgroundColor: VoidColors.primary, // Transparent background if no image
+                                      // child: user.profilePicture == null || user.profilePicture.isEmpty
+                                      //     ? Image.asset(
+                                      //   'assets/images/noimage.png',
+                                      //   fit: BoxFit.cover,
+                                      // )
+                                      //     : null,
                                     ),
+
+                                    // Container(
+                                    //   height: 60.63.h,
+                                    //   width: 60.63.w,
+                                    //   decoration:
+                                    //       BoxDecoration(shape: BoxShape.circle),
+                                    //   child: ClipRRect(
+                                    //     borderRadius:
+                                    //         BorderRadius.circular(50.r),
+                                    //     child: Image.network(
+                                    //       user.profilePicture,
+                                    //       fit: BoxFit.cover,
+                                    //       errorBuilder:
+                                    //           (context, error, stackTrace) {
+                                    //         return Image.asset(
+                                    //           'assets/images/noimage.png',
+                                    //           fit: BoxFit.cover,
+                                    //         );
+                                    //       },
+                                    //     ),
+                                    //   ),
+                                    // ),
                                     Positioned(
                                       bottom: 1,
                                       right: 1,

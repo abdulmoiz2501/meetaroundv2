@@ -88,7 +88,7 @@ class SignInController extends GetxController {
         print("***********************");
         print(responseData);
         await getCurrentLocation();
-        Get.toNamed(Routes.BOTTOM_NAV_BAR);
+        Get.offAllNamed(Routes.BOTTOM_NAV_BAR);
       } else {
         // Handle unexpected response codes
         Get.snackbar('Error', data['responseDesc'] ?? 'An error occurred',

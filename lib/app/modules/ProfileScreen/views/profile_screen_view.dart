@@ -47,6 +47,7 @@ class ProfileScreenView extends GetView<ProfileScreenController> {
           ),
           centerTitle: true,
           bottom: TabBar(
+            indicatorColor: VoidColors.secondary,
             tabs: List.generate(2, (index) {
               return Tab(
                 child: Obx(() {
@@ -105,33 +106,67 @@ class EditProfile extends StatelessWidget {
             Center(
               child: Stack(
                 children: [
-                  Container(
-                    height: 78.h,
-                    width: 78.w,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: VoidColors.grey4,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100.r),
-                      child: Obx(() {
-                        if (controller.pickedImage.value != null) {
-                          // Display image from file
-                          return Image.file(controller.pickedImage.value!,
-                              fit: BoxFit.cover);
-                        } else if (controller
-                            .imageFromServer.value.isNotEmpty) {
-                          // Display network image
-                          return Image.network(controller.imageFromServer.value,
-                              fit: BoxFit.cover);
-                        } else {
-                          // Fallback image if no image is available
-                          return Image.asset("assets/images/girl.png",
-                              fit: BoxFit.cover);
-                        }
-                      }),
-                    ),
-                  ),
+                CircleAvatar(
+                radius: 39.r,
+                backgroundColor: VoidColors.grey4,
+                child: Obx(() {
+                  if (controller.pickedImage.value != null) {
+                    return ClipOval(
+                      child: Image.file(
+                        controller.pickedImage.value!,
+                        fit: BoxFit.cover,
+                        width: 78.w,
+                        height: 78.h,
+                      ),
+                    );
+                  } else if (controller.imageFromServer.value.isNotEmpty) {
+                    return ClipOval(
+                      child: Image.network(
+                        controller.imageFromServer.value,
+                        fit: BoxFit.cover,
+                        width: 78.w,
+                        height: 78.h,
+                      ),
+                    );
+                  } else {
+                    return ClipOval(
+                      child: Image.asset(
+                        "assets/images/girl.png",
+                        fit: BoxFit.cover,
+                        width: 78.w,
+                        height: 78.h,
+                      ),
+                    );
+                  }
+                }),
+              ),
+              // Container(
+                  //   height: 78.h,
+                  //   width: 78.w,
+                  //   decoration: const BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     color: VoidColors.grey4,
+                  //   ),
+                  //   child: ClipRRect(
+                  //     borderRadius: BorderRadius.circular(100.r),
+                  //     child: Obx(() {
+                  //       if (controller.pickedImage.value != null) {
+                  //         // Display image from file
+                  //         return Image.file(controller.pickedImage.value!,
+                  //             fit: BoxFit.cover);
+                  //       } else if (controller
+                  //           .imageFromServer.value.isNotEmpty) {
+                  //         // Display network image
+                  //         return Image.network(controller.imageFromServer.value,
+                  //             fit: BoxFit.cover);
+                  //       } else {
+                  //         // Fallback image if no image is available
+                  //         return Image.asset("assets/images/girl.png",
+                  //             fit: BoxFit.cover);
+                  //       }
+                  //     }),
+                  //   ),
+                  // ),
                   Positioned(
                     bottom: 0,
                     right: 8,
@@ -372,7 +407,7 @@ class EditProfile extends StatelessWidget {
             ),
             Container(
               height: 200.h,
-              width: 200.w,
+              // width: 200.w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.r),
               ),
@@ -610,18 +645,16 @@ class ProfilePreview extends StatelessWidget {
                 height: 20.h,
               ),
               Center(
-                child: SizedBox(
-                    height: 278.h,
-                    width: 339.w,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0.r),
-                      child: Image.network(
-                        userController.user.value.profilePicture.isNotEmpty
-                            ? userController.user.value.profilePicture
-                            : noImagePlaceHolder,
-                        fit: BoxFit.cover,
-                      ),
-                    )),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0.r),
+                  child: Image.network(
+                    height: 200.h,
+                    userController.user.value.profilePicture.isNotEmpty
+                        ? userController.user.value.profilePicture
+                        : noImagePlaceHolder,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               SizedBox(
                 height: 40.h,

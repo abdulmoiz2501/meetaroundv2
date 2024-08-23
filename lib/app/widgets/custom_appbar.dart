@@ -8,6 +8,7 @@ import 'package:scratch_project/app/modules/NotificationScreen/views/notificatio
 import 'package:scratch_project/app/modules/PastInterections/views/past_interections_view.dart';
 import 'package:scratch_project/app/modules/SettingsScreen/views/settings_screen_view.dart';
 import 'package:scratch_project/app/utils/constraints/colors.dart';
+import 'package:scratch_project/app/utils/constraints/image_strings.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -29,12 +30,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           height: 30.h,
           width: 30.w,
           child: Center(
-            child: SvgPicture.asset("assets/icons/meet.svg"),
+            child: Image.asset(VoidImages.coloredAppLogo)
           ),
         ),
       ),
       title: Text(
-        "MeetAround",
+        "Dance Around",
         style: GoogleFonts.poppins(
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
@@ -42,18 +43,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
-        GestureDetector(
-          onTap: () {
-            // Action for the first icon
-          },
-          child: SizedBox(
-            height: 30.h,
-            width: 30.w,
-            child: Center(
-              child: SvgPicture.asset("assets/icons/frnd.svg"),
-            ),
-          ),
-        ),
+        // GestureDetector(
+        //   onTap: () {
+        //     // Action for the first icon
+        //   },
+        //   child: SizedBox(
+        //     height: 30.h,
+        //     width: 30.w,
+        //     child: Center(
+        //       child: SvgPicture.asset("assets/icons/frnd.svg"),
+        //     ),
+        //   ),
+        // ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.w),
           child: PopupMenuButton<int>(

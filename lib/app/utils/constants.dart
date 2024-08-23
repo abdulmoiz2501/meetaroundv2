@@ -113,7 +113,7 @@ var musicGeners2 = [
 var settingOptions = [
   "Location",
   "Notifications",
-  "Edit Profile",
+  // "Edit Profile",
   "Rate Us",
   "Help",
   "Share",
@@ -124,7 +124,7 @@ var settingOptions = [
 var settingIcons = [
   "assets/icons/loc.svg",
   "assets/icons/not.svg",
-  "assets/icons/pro.svg",
+  // "assets/icons/pro.svg",
   "assets/icons/rate.svg",
   "assets/icons/help.svg",
   "assets/icons/share.svg",
@@ -135,7 +135,7 @@ var settingIcons = [
 var settingRoutes = [
   Routes.NOTIFICATION_SCREEN,
   Routes.NOTIFICATION_SCREEN,
-  Routes.PROFILE_SCREEN,
+  // Routes.PROFILE_SCREEN,
   Routes.SETTINGS_SCREEN,
   Routes.SETTINGS_SCREEN,
   Routes.SETTINGS_SCREEN,

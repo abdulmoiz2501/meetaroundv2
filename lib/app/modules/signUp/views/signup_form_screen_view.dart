@@ -47,21 +47,21 @@ class SignupFormScreenView extends GetView<SignUpController> {
               children: [
                 SizedBox(height: 50.0.h),
                 Image.asset(
-                  VoidImages.secSplash,
-                  height: 100.h,
-                  width: 100.w,
+                  VoidImages.coloredAppLogo,
+                  height: 109.h,
+                  width: 103.w,
                 ),
-                SizedBox(height: 20.0.h),
+                SizedBox(height: 5.0.h),
                 Text(
-                  VoidTexts.signUpTitle,
+                  VoidTexts.danceAround,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
-                    fontSize: 24.sp,
-                    color: VoidColors.blackColor,
+                    fontSize: 18.sp,
+                    color: VoidColors.secondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 30.0.h),
+                SizedBox(height: 35.0.h),
                 CustomTextFormField(
                   obscureText: false,
                   controller: signUpController.nameController,
@@ -281,7 +281,7 @@ class SignupFormScreenView extends GetView<SignUpController> {
                         Get.to(() => SignInView());
                       },
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0.w),
+                        padding: EdgeInsets.symmetric(horizontal: 5.0.w,),
                         child: Text(
                           VoidTexts.signIn,
                           textAlign: TextAlign.center,
@@ -296,6 +296,7 @@ class SignupFormScreenView extends GetView<SignUpController> {
                     ),
                   ],
                 ),
+                SizedBox(height: 20.0.h),
               ],
             ),
           ),

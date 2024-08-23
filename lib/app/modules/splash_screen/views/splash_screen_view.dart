@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scratch_project/app/modules/splash_screen/views/second_splash_view.dart';
 import 'package:scratch_project/app/utils/constraints/colors.dart';
@@ -19,12 +20,29 @@ class SplashScreenView extends StatefulWidget {
 }
 
 class _SplashScreenViewState extends State<SplashScreenView> {
+  final box = GetStorage();
+
+
   @override
   void initState() {
+
     Future.delayed(const Duration(seconds: 2), () {
-      Get.offAll(() => SecondSplashView());
-      // Get.offAll(const JammingInProgressView());
+      bool? isSecondSplashShown = box.read('isSecondSplashShown');
+
+      if (isSecondSplashShown == null || !isSecondSplashShown) {
+        Get.offAllNamed(Routes.SECOND_SPLASH);
+        box.write('isSecondSplashShown', true);
+      } else {
+        final storedToken = box.read('token');
+        storedToken != null
+            ? Get.offAllNamed(Routes.BOTTOM_NAV_BAR)
+            : Get.offAllNamed(Routes.SIGN_IN);
+      }
     });
+    // Future.delayed(const Duration(seconds: 2), () {
+    //   final storedToken = box.read('token');
+    //   storedToken != null ? Get.toNamed(Routes.BOTTOM_NAV_BAR) : Get.toNamed(Routes.SECOND_SPLASH);
+    // });
   }
 
   @override
@@ -41,23 +59,24 @@ class _SplashScreenViewState extends State<SplashScreenView> {
         ),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 35.0.h, horizontal: 59.w),
+            padding: EdgeInsets.symmetric(vertical: 10.0.h, horizontal: 10.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: SizedBox(
-                    height: 270.h,
-                    width: 270.w,
-                    child: Image.asset(VoidImages.splashLogo),
-                  ),
+                SizedBox(
+                  height: 192.h,
+                  width: 203.w,
+                  child: Image.asset(VoidImages.appLogo),
                 ),
+                SizedBox(height: 10.0.h),
                 Text(
-                  VoidTexts.splashTitle,
-                  style: GoogleFonts.poppins(
-                      fontSize: 30.spMax,
+                  VoidTexts.danceAround,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                      fontSize: 28.sp,
                       color: VoidColors.whiteColor,
-                      fontWeight: FontWeight.w600),
+                      fontWeight: FontWeight.w500),
                 ),
               ],
             ),

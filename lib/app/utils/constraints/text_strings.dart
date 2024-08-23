@@ -2,13 +2,14 @@ class VoidTexts {
   /// Splash Screen
   static const splashTitle = 'Meet Around';
   static const getStarted = 'Get Started';
+  static const danceAround = "DANCE AROUND";
 
   /// OnBoarding Screens
   static const firstOnBoarding = 'Ready to Explore the world and your heart';
   static const secOnBoarding =
       "Ditch the endless swiping for good and make some memories you won't forget!";
   static const thirdOnBoarding = "Let’s meeting new people around you";
-  static const signUpTitle = "Welcome To MEETAROUND";
+  static const signUpTitle = "Welcome To DANCE AROUND";
   static const already = "Already have account?";
   static const login = "Log in";
   static const accept = "Accept";

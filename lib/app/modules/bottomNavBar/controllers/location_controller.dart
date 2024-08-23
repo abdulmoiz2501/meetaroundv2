@@ -63,16 +63,16 @@ class LocationController extends GetxController {
       print('::: Location WebSocket Response: $message');
     }, onError: (error) {
       print('WebSocket Error: $error');
-      Get.snackbar('Error', 'WebSocket connection error: $error',
-          backgroundColor: VoidColors.primary,
-          colorText: VoidColors.whiteColor,
-          snackPosition: SnackPosition.BOTTOM);
+      // Get.snackbar('Error', 'WebSocket connection error: $error',
+      //     backgroundColor: VoidColors.primary,
+      //     colorText: VoidColors.whiteColor,
+      //     snackPosition: SnackPosition.BOTTOM);
     }, onDone: () {
       print('WebSocket connection closed');
-      Get.snackbar('Info', 'WebSocket connection closed',
-          backgroundColor: VoidColors.primary,
-          colorText: VoidColors.whiteColor,
-          snackPosition: SnackPosition.BOTTOM);
+      // Get.snackbar('Info', 'WebSocket connection closed',
+      //     backgroundColor: VoidColors.primary,
+      //     colorText: VoidColors.whiteColor,
+      //     snackPosition: SnackPosition.BOTTOM);
     });
   }
 
@@ -101,16 +101,16 @@ class LocationController extends GetxController {
       });
     }, onError: (error) {
       print('::: WebSocket Error: $error');
-      Get.snackbar('Error', 'WebSocket connection error: $error',
-          backgroundColor: VoidColors.primary,
-          colorText: VoidColors.whiteColor,
-          snackPosition: SnackPosition.BOTTOM);
+      // Get.snackbar('Error', 'WebSocket connection error: $error',
+      //     backgroundColor: VoidColors.primary,
+      //     colorText: VoidColors.whiteColor,
+      //     snackPosition: SnackPosition.BOTTOM);
     }, onDone: () {
       print('::: WebSocket connection closed');
-      Get.snackbar('Info', 'WebSocket connection closed',
-          backgroundColor: VoidColors.primary,
-          colorText: VoidColors.whiteColor,
-          snackPosition: SnackPosition.BOTTOM);
+      // Get.snackbar('Info', 'WebSocket connection closed',
+      //     backgroundColor: VoidColors.primary,
+      //     colorText: VoidColors.whiteColor,
+      //     snackPosition: SnackPosition.BOTTOM);
     });
   }
 
