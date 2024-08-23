@@ -1,9 +1,14 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-
+import 'package:webview_flutter/webview_flutter.dart';
 import '../../SearchScreen/controllers/search_screen_controller.dart';
 
 class JammingScreenController extends GetxController {
@@ -20,13 +25,13 @@ class JammingScreenController extends GetxController {
 
   //late WebSocketChannel channel;
   final int userId;
-   int? targetUserId;
+  int? targetUserId;
 
   // Constructor
-  JammingScreenController({required this.userId,  this.targetUserId})
-  {
-    print("JammingScreenController initialized with userId:$userId and targetUserId: $targetUserId");
-}/* final int userId;
+  JammingScreenController({required this.userId, this.targetUserId}) {
+    print(
+        "JammingScreenController initialized with userId:$userId and targetUserId: $targetUserId");
+  } /* final int userId;
 
   final int targetUserId;
 
@@ -39,12 +44,12 @@ class JammingScreenController extends GetxController {
     fetchSpotifyTracks();
   }
 
- /* @override
+  /* @override
   void onClose() {
     channel.sink.close();
     super.onClose();
   }*/
-///WEBSOCKETS v1
+  ///WEBSOCKETS v1
 /*
   // New method to initialize WebSocket from an external source
   void initializeWebSocket(WebSocketChannel webSocketChannel) {
@@ -185,7 +190,7 @@ class JammingScreenController extends GetxController {
     //print();
   }
 */
-///WEBSOCKETS v1
+  ///WEBSOCKETS v1
 
   void toggleSearch() {
     isSearching.value = !isSearching.value;
@@ -195,7 +200,9 @@ class JammingScreenController extends GetxController {
   }
 
   void clearSearch() {
-    filteredTracks.assignAll(spotifyTracks.where((track) => track['category'] == selectedCategory.value).toList());
+    filteredTracks.assignAll(spotifyTracks
+        .where((track) => track['category'] == selectedCategory.value)
+        .toList());
   }
 
   Future<void> filterSongs(String query) async {
@@ -204,7 +211,8 @@ class JammingScreenController extends GetxController {
     } else {
       isLoading.value = true;
 
-      final String url = 'https://meet-around-apis-production.up.railway.app/spotify/search?query=$query&limit=10';
+      final String url =
+          'https://meet-around-apis-production.up.railway.app/spotify/search?query=$query&limit=10';
 
       try {
         final response = await http.get(Uri.parse(url));
@@ -216,11 +224,14 @@ class JammingScreenController extends GetxController {
             return {
               'name': track['name'],
               'uri': track['url'],
-              'images': [{'url': track['image']}],
+              'images': [
+                {'url': track['image']}
+              ],
             };
           }).toList());
         } else {
-          Get.snackbar("Error", "Failed to load search results. Status code: ${response.statusCode}");
+          Get.snackbar("Error",
+              "Failed to load search results. Status code: ${response.statusCode}");
         }
       } catch (e) {
         Get.snackbar("Error", "An error occurred while searching: $e");
@@ -241,19 +252,22 @@ class JammingScreenController extends GetxController {
   void setSelectedCategoryIndex(int index) {
     selectedCategoryIndex.value = index;
     selectedCategory.value = categories[index];
-    filteredTracks.assignAll(spotifyTracks.where((track) => track['category'] == selectedCategory.value).toList());
+    filteredTracks.assignAll(spotifyTracks
+        .where((track) => track['category'] == selectedCategory.value)
+        .toList());
   }
 
   void setSelectedSongIndex(int index) {
     selectedSongIndex.value = index;
   }
 
-  Future<void> openSpotifyTrack(String spotifyUri, {bool isArtist = false}) async {
+/*  Future<void> openSpotifyTrack(String spotifyUri, {bool isArtist = false}) async {
     final Uri spotifyUrl = Uri.parse(spotifyUri);
     final Uri spotifyWebUrl = Uri.parse(spotifyUri);
     final Uri playStoreUrl = Uri.parse("https://play.google.com/store/apps/details?id=com.spotify.music");
 
     try {
+      print("Launching spotify webview");
       await launchUrl(
         spotifyWebUrl,
         mode: LaunchMode.inAppWebView,
@@ -261,6 +275,10 @@ class JammingScreenController extends GetxController {
     } catch (e) {
       Get.snackbar("Error", "An error occurred while launching: $e");
     }
+  }*/
+
+  Future<void> openSpotifyTrack(String spotifyUri) async {
+    Get.to(() => SpotifyWebView(spotifyUri: spotifyUri));
   }
 
   Future<void> fetchSpotifyTracks() async {
@@ -269,7 +287,8 @@ class JammingScreenController extends GetxController {
     try {
       isLoading.value = true;
       final response = await http.get(
-        Uri.parse('https://meet-around-apis-production.up.railway.app/spotify/tracks'),
+        Uri.parse(
+            'https://meet-around-apis-production.up.railway.app/spotify/tracks'),
       );
 
       if (response.statusCode == 200) {
@@ -282,7 +301,9 @@ class JammingScreenController extends GetxController {
           spotifyTracks.add({
             'name': item['name'],
             'uri': item['url'],
-            'images': [{'url': item['image']}],
+            'images': [
+              {'url': item['image']}
+            ],
             'category': item['category'],
           });
 
@@ -293,10 +314,13 @@ class JammingScreenController extends GetxController {
 
         if (categories.isNotEmpty) {
           selectedCategory.value = categories[0];
-          filteredTracks.assignAll(spotifyTracks.where((track) => track['category'] == selectedCategory.value).toList());
+          filteredTracks.assignAll(spotifyTracks
+              .where((track) => track['category'] == selectedCategory.value)
+              .toList());
         }
       } else {
-        Get.snackbar("Error", "Failed to load tracks from Spotify. Status code: ${response.statusCode}");
+        Get.snackbar("Error",
+            "Failed to load tracks from Spotify. Status code: ${response.statusCode}");
       }
     } catch (e) {
       Get.snackbar("Error", "An error occurred while fetching tracks: $e");
@@ -305,3 +329,166 @@ class JammingScreenController extends GetxController {
     }
   }
 }
+
+class SpotifyWebView extends StatefulWidget {
+  final String spotifyUri;
+
+  SpotifyWebView({required this.spotifyUri});
+
+  @override
+  _SpotifyWebViewState createState() => _SpotifyWebViewState();
+}
+
+class _SpotifyWebViewState extends State<SpotifyWebView> {
+  late final WebViewController _controller;
+  bool _pageLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageFinished: (String url) {
+            if (mounted) {
+              setState(() {
+                _pageLoaded = true;
+              });
+            }
+
+            // Inject JavaScript to check for the audio element and play the song
+            _controller.runJavaScript('''
+              (function() {
+                var tryToPlay = function() {
+                  var audioElement = document.querySelector('audio');
+                  if (audioElement) {
+                    audioElement.play().catch(function(error) {
+                      console.log('Autoplay was prevented: ', error);
+                    });
+                  } else {
+                    setTimeout(tryToPlay, 500); // Try again after 500ms if audio element isn't found
+                  }
+                };
+                tryToPlay();
+              })();
+            ''');
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(widget.spotifyUri));
+  }
+
+  @override
+  void dispose() {
+    _stopJamming();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        //_showCancelJammingDialog(context);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Spotify"),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              _showCancelJammingDialog(context);
+            },
+          ),
+        ),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  child: _pageLoaded
+                      ? WebViewWidget(controller: _controller)
+                      : SizedBox.shrink(),
+                ),
+                Container(
+                  color: Color(0xFFFF69B4),
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFFF69B4),
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    onPressed: () {
+                      _showCancelJammingDialog(context);
+                    },
+                    child: Text(
+                      "Cancel Jamming",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (!_pageLoaded)
+              Center(
+                child: CircularProgressIndicator(),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showCancelJammingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Cancel Jamming'),
+          content: Text('Do you really want to cancel jamming?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+              child: Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                _stopJamming();
+                Navigator.of(context).pop(); // Dismiss the dialog
+                Get.back(); // Go back to the previous screen
+              },
+              child: Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _stopJamming() {
+    // Run JavaScript to stop the audio playback
+    _controller.runJavaScript('''
+      var audioElement = document.querySelector('audio');
+      if (audioElement) {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+      }
+    ''').then((_) {
+      if (mounted) {
+        // Ensure the widget is still mounted before calling setState
+        setState(() {
+          _pageLoaded = false;
+        });
+      }
+    });
+  }
+}
+
+
+
+
+

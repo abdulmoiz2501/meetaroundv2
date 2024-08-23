@@ -118,7 +118,7 @@ class JammingScreenView extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
             child: Container(
               width: double.infinity,
-              height: 282.h,
+              height: 182.h,
               decoration: BoxDecoration(
                 color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(10.r),
