@@ -32,8 +32,10 @@ class WebSocketController extends GetxController {
     }
   }
 
-  Stream<String> get messageStream =>
-      _channel.stream.map((event) => event.toString());
+  late final Stream<String> _broadcastStream =
+      _channel.stream.map((event) => event.toString()).asBroadcastStream();
+
+  Stream<String> get messageStream => _broadcastStream;
 
   void sendInit(int userId) {
     final Logger logger = Logger();

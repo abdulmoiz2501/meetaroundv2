@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:scratch_project/app/utils/constraints/colors.dart';
 import 'package:scratch_project/app/utils/constraints/text_strings.dart';
 
-
 class JammingInProgressView extends StatefulWidget {
-  final bool isSender;
-  const JammingInProgressView({super.key, required this.isSender});
+  const JammingInProgressView({super.key});
 
   @override
   State<JammingInProgressView> createState() => _JammingInProgressViewState();
 }
 
 class _JammingInProgressViewState extends State<JammingInProgressView> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +22,6 @@ class _JammingInProgressViewState extends State<JammingInProgressView> {
             colors: [VoidColors.primary, VoidColors.secondary],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            // stops: [0.6, 1],
           ),
         ),
         child: Center(
@@ -38,21 +33,19 @@ class _JammingInProgressViewState extends State<JammingInProgressView> {
               children: [
                 Expanded(
                   child: SizedBox(
-                    height:100 .h,
+                    height: 100.h,
                     width: 100.w,
                     child: Lottie.asset('assets/icons/UQejRQZqHg.json'),
                   ),
                 ),
-                // 40.0.verticalSpace,
                 Center(
                   child: Text(
                     textAlign: TextAlign.center,
-                    widget.isSender ? VoidTexts.pleaseWaitToAccept : VoidTexts.jammingInProgress,
+                    VoidTexts.jammingInProgress,
                     style: GoogleFonts.poppins(
                         fontSize: 18.spMax,
                         color: VoidColors.whiteColor,
-                        fontWeight: FontWeight.w500
-                    ),
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
               ],
@@ -63,4 +56,3 @@ class _JammingInProgressViewState extends State<JammingInProgressView> {
     );
   }
 }
-
