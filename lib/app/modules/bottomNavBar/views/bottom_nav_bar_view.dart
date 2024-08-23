@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:scratch_project/app/controllers/jam_controller.dart';
 import 'package:scratch_project/app/controllers/user_controller.dart';
 import 'package:scratch_project/app/controllers/websocket_controller.dart';
+import 'package:scratch_project/app/modules/JammingScreen/controllers/jamming_screen_controller.dart';
+import 'package:scratch_project/app/modules/JammingScreen/views/jamming_in_progress_view.dart';
 import 'package:scratch_project/app/modules/PastInterections/views/past_interections_view.dart';
 import 'package:scratch_project/app/modules/ProfileScreen/views/profile_screen_view.dart';
 import 'package:scratch_project/app/modules/SearchScreen/views/search_screen_view.dart';
@@ -66,6 +68,7 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
                             userController.user.value.id.toString(), 'accept');
 
                         Get.back();
+                        Get.to(() => const JammingInProgressView());
                       },
                     );
                   });
@@ -91,6 +94,20 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
 
                   // print(
                   //     'This is the isAccepted value: ${jamController.isAccepted}');
+                } else if (message['type'] == 'url') {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    final JamController jamController = Get.isRegistered()
+                        ? Get.find()
+                        : Get.put(JamController());
+                    jamController.jamData.value = message;
+                    print('This is the jam data: ${jamController.jamData}');
+                    final JammingScreenController jammingScreenController =
+                        Get.isRegistered()
+                            ? Get.find()
+                            : Get.put(JammingScreenController());
+                    jammingScreenController
+                        .openSpotifyTrack(message['songUrl']);
+                  });
                 }
               }
               return Obx(

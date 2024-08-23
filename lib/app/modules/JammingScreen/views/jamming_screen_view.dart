@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scratch_project/app/controllers/jam_controller.dart';
+import 'package:scratch_project/app/controllers/user_controller.dart';
+import 'package:scratch_project/app/controllers/websocket_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../controllers/jamming_screen_controller.dart';
@@ -21,6 +23,8 @@ class JammingScreenView extends StatelessWidget {
   final JammingScreenController controller = Get.put(
     JammingScreenController(),
   );
+  final UserController userController = Get.find();
+  final WebSocketController webSocketController = Get.find();
   final JamController jamController = Get.find();
 
   @override
@@ -295,6 +299,12 @@ class JammingScreenView extends StatelessWidget {
                         final playlist = controller.filteredTracks[index];
                         return GestureDetector(
                           onTap: () {
+                            webSocketController.sendSongUrl(
+                              userController.user.value.id.toString(),
+                              jamController.otherUserId.value,
+                              playlist['uri'],
+                              40,
+                            );
                             controller.setSelectedSongIndex(index);
                             controller.setSelectedSong(playlist['name']);
                             controller.openSpotifyTrack(playlist['uri']);

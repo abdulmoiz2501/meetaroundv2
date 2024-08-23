@@ -41,7 +41,9 @@ class WebSocketController extends GetxController {
     final Logger logger = Logger();
     logger.log(Level.info, "Sending init message to WebSocket");
     if (isConnected.value) {
-      final payload = jsonEncode({"type": "init", "userId": 32});
+      final payload = jsonEncode(
+        {"type": "init", "userId": userController.user.value.id},
+      );
       _channel.sink.add(payload);
       print("Sent: $payload");
     } else {
