@@ -8,5 +8,6 @@ class JamController extends GetxController {
     otherUserId.value = '';
     isAccepted.value = null;
     jamData.clear();
+    print('THe jam controller is resetted');
   }
 }

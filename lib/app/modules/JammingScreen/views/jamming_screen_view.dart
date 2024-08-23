@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scratch_project/app/controllers/jam_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../controllers/jamming_screen_controller.dart';
@@ -12,22 +13,21 @@ class JammingScreenView extends StatelessWidget {
   final int userId;
   final int targetUserId; // Add this to accept targetUserId
 
-  JammingScreenView({Key? key, required this.userId, required this.targetUserId}) : super(key: key);
+  JammingScreenView(
+      {Key? key, required this.userId, required this.targetUserId})
+      : super(key: key);
 
   // Pass the userId when creating the controller instance
-  final JammingScreenController controller = Get.put(JammingScreenController
-    (
-      userId: Get.arguments['userId'],
-      targetUserId: Get.arguments['targetUserId'], 
-  ),
+  final JammingScreenController controller = Get.put(
+    JammingScreenController(),
   );
+  final JamController jamController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-
     // Use a post-frame callback to send the jamming request after the screen is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-     // controller.sendJammingRequest(targetUserId); // Call the function with the targetUserId
+      // controller.sendJammingRequest(targetUserId); // Call the function with the targetUserId
     });
 
     return Scaffold(
@@ -45,35 +45,35 @@ class JammingScreenView extends StatelessWidget {
           },
         ),
         title: Obx(
-              () => controller.isSearching.value
+          () => controller.isSearching.value
               ? TextField(
-            onChanged: (value) {
-              controller.filterSongs(value);
-            },
-            autofocus: true,
-            style: GoogleFonts.poppins(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              color: VoidColors.whiteColor,
-            ),
-            decoration: InputDecoration(
-              hintText: 'Search Songs',
-              hintStyle: GoogleFonts.poppins(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                color: VoidColors.whiteColor.withOpacity(0.7),
-              ),
-              border: InputBorder.none,
-            ),
-          )
+                  onChanged: (value) {
+                    controller.filterSongs(value);
+                  },
+                  autofocus: true,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: VoidColors.whiteColor,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Search Songs',
+                    hintStyle: GoogleFonts.poppins(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: VoidColors.whiteColor.withOpacity(0.7),
+                    ),
+                    border: InputBorder.none,
+                  ),
+                )
               : Text(
-            "Jamming session",
-            style: GoogleFonts.poppins(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              color: VoidColors.whiteColor,
-            ),
-          ),
+                  "Jamming session",
+                  style: GoogleFonts.poppins(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: VoidColors.whiteColor,
+                  ),
+                ),
         ),
         actions: [
           IconButton(
@@ -100,7 +100,7 @@ class JammingScreenView extends StatelessWidget {
           }
         },
         child: Obx(
-              () => controller.isLoading.value
+          () => controller.isLoading.value
               ? buildShimmerLoading()
               : buildContent(),
         ),
@@ -118,7 +118,7 @@ class JammingScreenView extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
             child: Container(
               width: double.infinity,
-              height: 182.h,
+              height: 12.h,
               decoration: BoxDecoration(
                 color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(10.r),
@@ -184,7 +184,7 @@ class JammingScreenView extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.r),
                   child: Obx(
-                        () {
+                    () {
                       if (controller.filteredTracks.isEmpty) {
                         return Image.asset(
                           "assets/images/placeholder.jpg",
@@ -194,11 +194,11 @@ class JammingScreenView extends StatelessWidget {
 
                       final imageUrl = controller.selectedSongIndex.value == -1
                           ? controller.filteredTracks[0]['images'][0]['url'] ??
-                          'assets/images/placeholder.jpg'
-                          : controller.filteredTracks[
-                      controller.selectedSongIndex.value]
-                      ['images'][0]['url'] ??
-                          'assets/images/placeholder.jpg';
+                              'assets/images/placeholder.jpg'
+                          : controller.filteredTracks[controller
+                                  .selectedSongIndex
+                                  .value]['images'][0]['url'] ??
+                              'assets/images/placeholder.jpg';
 
                       return Image.network(
                         imageUrl,
@@ -222,7 +222,7 @@ class JammingScreenView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Obx(
-                        () => Container(
+                    () => Container(
                       width: 160.w,
                       height: 46.h,
                       decoration: BoxDecoration(
@@ -279,104 +279,100 @@ class JammingScreenView extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             Obx(
-                  () => controller.filteredTracks.isEmpty
+              () => controller.filteredTracks.isEmpty
                   ? Text(
-                "No playlist found",
-                style: GoogleFonts.poppins(
-                  fontSize: 14.sp,
-                  color: VoidColors.whiteColor,
-                ),
-              )
+                      "No playlist found",
+                      style: GoogleFonts.poppins(
+                        fontSize: 14.sp,
+                        color: VoidColors.whiteColor,
+                      ),
+                    )
                   : ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: controller.filteredTracks.length,
-                itemBuilder: (context, index) {
-                  final playlist = controller.filteredTracks[index];
-                  return GestureDetector(
-                    onTap: () {
-                      controller.setSelectedSongIndex(index);
-                      controller.setSelectedSong(playlist['name']);
-                      controller.openSpotifyTrack(playlist['uri']);
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 5.h),
-                      decoration: BoxDecoration(
-                        color: controller.selectedSongIndex.value == index
-                            ? VoidColors.whiteColor.withOpacity(0.08)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 15.h, horizontal: 10.w),
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                Image.network(
-                                  playlist['images'][0]['url'] ??
-                                      'assets/images/placeholder.jpg',
-                                  height: 21.h,
-                                  width: 23.w,
-                                  errorBuilder:
-                                      (context, error, stackTrace) {
-                                    return Image.asset(
-                                      'assets/images/placeholder.jpg',
-                                      height: 21.h,
-                                      width: 23.w,
-                                    );
-                                  },
-                                ),
-                                SizedBox(width: 13.w),
-                                Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 200.w,
-                                      child: Text(
-                                        playlist['name'],
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color:
-                                          VoidColors.blackColor,
-                                        ),
-                                        overflow:
-                                        TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    SizedBox(
-                                      width: 200.w,
-                                      child: Text(
-                                        playlist['description'] ?? '',
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 10.sp,
-                                          fontWeight: FontWeight.w400,
-                                          color:
-                                          VoidColors.blackColor,
-                                        ),
-                                        overflow:
-                                        TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: controller.filteredTracks.length,
+                      itemBuilder: (context, index) {
+                        final playlist = controller.filteredTracks[index];
+                        return GestureDetector(
+                          onTap: () {
+                            controller.setSelectedSongIndex(index);
+                            controller.setSelectedSong(playlist['name']);
+                            controller.openSpotifyTrack(playlist['uri']);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 5.h),
+                            decoration: BoxDecoration(
+                              color: controller.selectedSongIndex.value == index
+                                  ? VoidColors.whiteColor.withOpacity(0.08)
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(10.r),
                             ),
-                          ],
-                        ),
-                      ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 15.h, horizontal: 10.w),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Image.network(
+                                        playlist['images'][0]['url'] ??
+                                            'assets/images/placeholder.jpg',
+                                        height: 21.h,
+                                        width: 23.w,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(
+                                            'assets/images/placeholder.jpg',
+                                            height: 21.h,
+                                            width: 23.w,
+                                          );
+                                        },
+                                      ),
+                                      SizedBox(width: 13.w),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: 200.w,
+                                            child: Text(
+                                              playlist['name'],
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 12.sp,
+                                                fontWeight: FontWeight.w400,
+                                                color: VoidColors.blackColor,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          SizedBox(height: 8.h),
+                                          SizedBox(
+                                            width: 200.w,
+                                            child: Text(
+                                              playlist['description'] ?? '',
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 10.sp,
+                                                fontWeight: FontWeight.w400,
+                                                color: VoidColors.blackColor,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),
