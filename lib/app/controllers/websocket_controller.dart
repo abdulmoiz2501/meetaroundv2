@@ -1,139 +1,102 @@
+import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
+import 'package:scratch_project/app/controllers/user_controller.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
+class WebSocketController extends GetxController {
+  late WebSocketChannel _channel;
+  final UserController userController = Get.put(UserController());
+
+  var isConnected = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    connectWebSocket();
+  }
+
+  void connectWebSocket() {
+    try {
+      _channel = WebSocketChannel.connect(
+        Uri.parse(
+            'wss://meet-around-apis-production.up.railway.app/ws/playback'),
+      );
+      isConnected.value = true;
+
+      sendInit(userController.user.value.id);
+    } catch (e) {
+      isConnected.value = false;
+      print("Failed to connect to WebSocket: $e");
+    }
+  }
+
+  late final Stream<String> _broadcastStream =
+      _channel.stream.map((event) => event.toString()).asBroadcastStream();
+
+  Stream<String> get messageStream => _broadcastStream;
+
+  void sendInit(int userId) {
+    final Logger logger = Logger();
+    logger.log(Level.info, "Sending init message to WebSocket");
+    if (isConnected.value) {
+      final payload = jsonEncode({"type": "init", "userId": userId});
+      _channel.sink.add(payload);
+      print("Sent: $payload");
+    } else {
+      print("WebSocket is not connected, unable to send init message");
+    }
+  }
+
+  void sendJammingRequest(String userId, String targetUserId) {
+    if (isConnected.value) {
+      final payload = jsonEncode(
+          {"type": "request", "userId": userId, "targetUserId": targetUserId});
+      _channel.sink.add(payload);
+      print("Sent: $payload");
+    } else {
+      print("WebSocket is not connected, unable to send jamming request");
+    }
+  }
+
+  void sendJammingResponse(String userId, String action) {
+    if (isConnected.value) {
+      final payload =
+          jsonEncode({"type": "response", "userId": userId, "action": action});
+      _channel.sink.add(payload);
+      print("Sent: $payload");
+    } else {
+      print("WebSocket is not connected, unable to send jamming response");
+    }
+  }
+
+  void sendSongUrl(
+      String userId, String targetUserId, String songUrl, int songDuration) {
+    if (isConnected.value) {
+      final payload = jsonEncode({
+        "type": "url",
+        "userId": userId,
+        "targetUserId": targetUserId,
+        "songUrl": songUrl,
+        "songDuration": songDuration
+      });
+      _channel.sink.add(payload);
+      print("Sent: $payload");
+    } else {
+      print("WebSocket is not connected, unable to send song URL");
+    }
+  }
+
+  @override
+  void onClose() {
+    _channel.sink.close();
+    super.onClose();
+  }
+}
+
 class LocationWebSocketController extends GetxController {
-  // late WebSocket _channel;
-  // bool isConnected = false;
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   connectToWebSocket();
-  // }
-
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  // }
-
-  // @override
-  // void onClose() {
-  //   _channel.close();
-  //   super.onClose();
-  // }
-
-  // Future<void> connectToWebSocket() async {
-  //   _channel = WebSocket(
-  //     Uri.parse(
-  //         'wss://meet-around-apis-production.up.railway.app/ws}'),
-  //   );
-
-  //   _channel.messages.listen(
-  //     (message) {
-  //       print("::: Messages from Web Socket $message");
-  //       print("::: connection of web socket ${_channel.connection.state}");
-  //     },
-  //     onDone: () {
-  //       print("::: on Done socket");
-  //       isConnected = false;
-  //       reconnectWebSocket();
-  //     },
-  //     onError: (error) {
-  //       print("::: on Error socket");
-  //       isConnected = false;
-  //       reconnectWebSocket();
-  //     },
-  //   );
-  // }
-
-  // void reconnectWebSocket() {
-  //   Future.delayed(Duration(seconds: 5), () {
-  //     if (!isConnected) {
-  //       connectToWebSocket();
-  //     }
-  //   });
-  // }
-
-  // void addPayload(String userid, double latitude,double longitude) {
-  //   _channel.send(
-  //       '{"userId": $userid,"latitude": "$latitude","longitude": "$longitude"}');
-  // }
-
   var latitude = 0.0.obs;
   var longitude = 0.0.obs;
   var webSocketResponse = ''.obs;
-
-  //   Future<void> getCurrentLocation(String uid) async {
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     Get.snackbar('Error', 'Location services are disabled.',
-  //         backgroundColor: VoidColors.primary, colorText: VoidColors.secondary);
-  //     return;
-  //   }
-
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       Get.snackbar('Error', 'Location permissions are denied.',
-  //           backgroundColor: VoidColors.primary,
-  //           colorText: VoidColors.secondary);
-  //       return;
-  //     }
-  //   }
-
-  //   if (permission == LocationPermission.deniedForever) {
-  //     Get.snackbar('Error',
-  //         'Location permissions are permanently denied, we cannot request permissions.',
-  //         backgroundColor: VoidColors.primary,
-  //         colorText: VoidColors.whiteColor,
-  //         snackPosition: SnackPosition.BOTTOM);
-  //     return;
-  //   }
-
-  //   Position position = await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.high);
-  //   latitude.value = position.latitude;
-  //   longitude.value = position.longitude;
-  //   print("::: Got current pposition ${position.latitude} ${position.longitude}");
-
-  //   connectWebSocket('wss://meet-around-apis-production.up.railway.app/ws', 
-  //     {
-  // "userId": uid,
-  // "latitude": "${latitude.value}",
-  // "longitude": "${longitude.value}"
-  //   });
-  // }
-
-  // ///Web socket part
-  // void connectWebSocket(String url, Map<String,dynamic> payload) {
-  //   final channel = WebSocketChannel.connect(
-  //     Uri.parse(url),
-  //   );
-
-  //   channel.sink.add(jsonEncode({
-  //     payload
-  //   }));
-
-  //   channel.stream.listen((message) {
-  //     webSocketResponse.value = message;
-  //     print('::: WebSocket Response: $message');
-  //   }, onError: (error) {
-  //     print('WebSocket Error: $error');
-  //     Get.snackbar('Error', 'WebSocket connection error: $error',
-  //         backgroundColor: VoidColors.primary,
-  //         colorText: VoidColors.whiteColor,
-  //         snackPosition: SnackPosition.BOTTOM);
-  //   }, onDone: () {
-  //     print('WebSocket connection closed');
-  //     Get.snackbar('Info', 'WebSocket connection closed',
-  //         backgroundColor: VoidColors.primary,
-  //         colorText: VoidColors.whiteColor,
-  //         snackPosition: SnackPosition.BOTTOM);
-  //   });
-  // }
-
-
 }

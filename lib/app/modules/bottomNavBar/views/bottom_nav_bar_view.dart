@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:scratch_project/app/controllers/jam_controller.dart';
+import 'package:scratch_project/app/controllers/user_controller.dart';
+import 'package:scratch_project/app/controllers/websocket_controller.dart';
 import 'package:scratch_project/app/modules/PastInterections/views/past_interections_view.dart';
 import 'package:scratch_project/app/modules/ProfileScreen/views/profile_screen_view.dart';
 import 'package:scratch_project/app/modules/SearchScreen/views/search_screen_view.dart';
@@ -9,6 +14,7 @@ import 'package:scratch_project/app/modules/bottomNavBar/views/home_screen_view.
 import 'package:scratch_project/app/routes/app_pages.dart';
 import 'package:scratch_project/app/utils/constraints/text_strings.dart';
 import 'package:scratch_project/app/widgets/homeHeaderWidget.dart';
+import 'package:scratch_project/app/widgets/jamming_request_alertBox.dart';
 
 import '../../../utils/constraints/colors.dart';
 import '../../../utils/constraints/image_strings.dart';
@@ -17,12 +23,16 @@ import '../controllers/bottom_nav_bar_controller.dart';
 
 class BottomNavBarView extends GetView<BottomNavBarController> {
   BottomNavBarView({super.key});
-  final BottomNavBarController bottomNavBarController = Get.put(BottomNavBarController());
+  final BottomNavBarController bottomNavBarController =
+      Get.put(BottomNavBarController());
+  final WebSocketController webSocketController =
+      Get.find<WebSocketController>();
+  final UserController userController = Get.find();
 
   final List<Widget> _pages = [
     HomeScreenView(),
     PastInterectionsView(),
-   SearchScreen(),
+    SearchScreen(),
     ChatScreenView(),
     ProfileScreenView(),
   ];
@@ -33,34 +43,89 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
       backgroundColor: VoidColors.whiteColor,
       resizeToAvoidBottomInset: false,
       extendBody: true,
-      body: Obx(() =>
-          AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: _pages[bottomNavBarController.selectedIndex.value]),
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: StreamBuilder(
+            stream: webSocketController.messageStream.asBroadcastStream(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final message = jsonDecode(snapshot.data.toString());
+                print("Message in BottomNavBarView: ${message}");
+                if (message['type'] == 'request') {
+                  final x = message['userId'].toString();
+                  print('The user id is: $x');
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showJammingRequestDialog(
+                      name: 'name',
+                      onReject: () {
+                        webSocketController.sendJammingResponse(
+                            userController.user.value.id.toString(), 'reject');
+                      },
+                      onAccept: () {
+                        webSocketController.sendJammingResponse(
+                            userController.user.value.id.toString(), 'accept');
+
+                        Get.back();
+                      },
+                    );
+                  });
+                } else if (message['status'] == 'accept') {
+                  print('////this message is accepted $message');
+                  final JamController jamController = Get.find();
+                  jamController.otherUserId.value =
+                      message['userId'].toString();
+                  jamController.isAccepted.value = true;
+                  jamController.jamData.value = message;
+                } else if (message['status'] == 'reject') {
+                  print('////this message is rejected $message');
+
+                  final JamController jamController = Get.find();
+                  jamController.otherUserId.value =
+                      message['userId'].toString();
+                  jamController.isAccepted.value = false;
+                  jamController.jamData.value = message;
+                  // print(
+                  //     'This is the isAccepted value: ${jamController.isAccepted}');
+                }
+              }
+              return Obx(
+                  () => _pages[bottomNavBarController.selectedIndex.value]);
+            }),
       ),
       bottomNavigationBar: Container(
         height: 50.h,
         decoration: const BoxDecoration(
           color: VoidColors.bottomNavColor,
         ),
-        child: Obx(() =>
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildNavItem(VoidImages.homeIcon, 0, bottomNavBarController),
-                _buildNavItem(VoidImages.favouriteIcon, 1, bottomNavBarController),
-                _buildNavItem(VoidImages.searchIcon, 2, bottomNavBarController),
-                _buildNavItem(VoidImages.msgIcon, 3, bottomNavBarController),
-                _buildNavItem(VoidImages.personIcon, 4, bottomNavBarController),
-              ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Obx(() =>
+                _buildNavItem(VoidImages.homeIcon, 0, bottomNavBarController)),
+            Obx(
+              () => _buildNavItem(
+                  VoidImages.favouriteIcon, 1, bottomNavBarController),
             ),
+            Obx(
+              () => _buildNavItem(
+                  VoidImages.searchIcon, 2, bottomNavBarController),
+            ),
+            Obx(() =>
+                _buildNavItem(VoidImages.msgIcon, 3, bottomNavBarController)),
+            Obx(
+              () => _buildNavItem(
+                  VoidImages.personIcon, 4, bottomNavBarController),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(String asset, int index, BottomNavBarController controller, {double? size}) {
+  Widget _buildNavItem(
+      String asset, int index, BottomNavBarController controller,
+      {double? size}) {
     return GestureDetector(
       onTap: () {
         controller.changeIndex(index);
@@ -74,13 +139,16 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                      asset,
-                      width: controller.selectedIndex.value == index ? (size ?? 29.sp) : (size ?? 28.sp),
-                      height: controller.selectedIndex.value == index ? (size ?? 29.sp) : (size ?? 28.sp),
-                      color: controller.selectedIndex.value == index ?
-                      VoidColors.secondary : null
-                  ),
+                  Image.asset(asset,
+                      width: controller.selectedIndex.value == index
+                          ? (size ?? 29.sp)
+                          : (size ?? 28.sp),
+                      height: controller.selectedIndex.value == index
+                          ? (size ?? 29.sp)
+                          : (size ?? 28.sp),
+                      color: controller.selectedIndex.value == index
+                          ? VoidColors.secondary
+                          : null),
                   controller.selectedIndex.value == index
                       ? const SelectBar()
                       : const SizedBox(),

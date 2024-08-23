@@ -12,5 +12,6 @@ class BottomNavBarBinding extends Bindings {
     Get.lazyPut<LocationWebSocketController>(
       () => LocationWebSocketController(),
     );
+    Get.put(WebSocketController(), permanent: true);
   }
 }

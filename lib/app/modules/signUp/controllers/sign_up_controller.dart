@@ -122,6 +122,7 @@ class SignUpController extends GetxController {
     });
 
     try {
+      loading(true);
       final response =
           await http.post(Uri.parse(apiUrl), headers: headers, body: body);
       final responseData = json.decode(response.body);
@@ -144,6 +145,8 @@ class SignUpController extends GetxController {
           backgroundColor: VoidColors.primary,
           colorText: VoidColors.whiteColor,
           snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      loading(false);
     }
   }
 
@@ -327,6 +330,8 @@ class SignUpController extends GetxController {
     latitude.value = position.latitude;
     longitude.value = position.longitude;
     isLoading.value = false;
+    await signUp();
+    Get.offAllNamed(Routes.SIGN_IN);
   }
 
   void connectWebSocket() {

@@ -8,6 +8,7 @@ import 'package:scratch_project/app/utils/constants.dart';
 import 'package:scratch_project/app/utils/constraints/colors.dart';
 import 'package:scratch_project/app/widgets/custom_switch.dart';
 
+import '../../../widgets/show_logout_dialog.dart';
 import '../controllers/settings_screen_controller.dart';
 
 class SettingsScreenView extends GetView<SettingsScreenController> {
@@ -67,6 +68,12 @@ class SettingsScreenView extends GetView<SettingsScreenController> {
                 onTap: () {
                   if (index == 2) {
                     profileScreenController.selectedIndex(1);
+                  }
+                  if (index == 7) {
+                    showLogoutDialog(context: context, onYes: () async {
+                      await controller.logout();
+                      // Get.back();
+                    });
                   }
                   Get.toNamed(settingRoutes[index]);
                 },

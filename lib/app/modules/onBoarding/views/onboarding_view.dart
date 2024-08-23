@@ -77,7 +77,7 @@ class OnBoardingView extends StatelessWidget {
                   return Stack(
                     children: [
                       onBoardingPages[index],
-                      Positioned(
+                      index == 2 ? SizedBox() : Positioned(
                         top: 40.h,
                         right: 20.w,
                         child: GestureDetector(

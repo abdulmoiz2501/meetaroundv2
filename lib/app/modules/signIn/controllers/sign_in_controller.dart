@@ -1,6 +1,7 @@
 import 'dart:convert'; // For jsonEncode and jsonDecode
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:scratch_project/app/controllers/user_controller.dart';
@@ -24,6 +25,7 @@ class SignInController extends GetxController {
   var latitude = 0.0.obs;
   // var longitude = 0.0.obs;
   var webSocketResponse = ''.obs;
+  final box = GetStorage();
 
   Future<void> signIn(String email, String password) async {
     // Validate if any fields are empty
@@ -52,9 +54,9 @@ class SignInController extends GetxController {
           snackPosition: SnackPosition.BOTTOM);
       return;
     }
-
+    loading.value = true;
     try {
-      loading.value = true; // Set loading to true
+       // Set loading to true
       final response = await http.post(
         Uri.parse(_url),
         headers: {
@@ -65,7 +67,7 @@ class SignInController extends GetxController {
           'password': password,
         }),
       );
-      loading.value = false; // Set loading to false
+      // loading.value = false; // Set loading to false
 
       final data = jsonDecode(response.body);
       print('This is the response of the login api: $data');
@@ -79,6 +81,9 @@ class SignInController extends GetxController {
         userController.token.value = token.value;
         print('///done with the token');
         userController.user.value = UserModel.fromJson(data['data']);
+        box.write('token', token.value);
+        box.write('user', data['data']);
+
         print('///done with the user model');
         print("***********************");
         print(responseData);
@@ -92,13 +97,15 @@ class SignInController extends GetxController {
             snackPosition: SnackPosition.BOTTOM);
       }
     } catch (e) {
-      loading.value = false; // Set loading to false in case of an error
+      // loading.value = false; // Set loading to false in case of an error
       // Handle network or other errors
       print('This is the error: $e');
       Get.snackbar('Error', 'An error occurred. Please try again.',
           backgroundColor: VoidColors.primary,
           colorText: VoidColors.whiteColor,
           snackPosition: SnackPosition.BOTTOM);
+    } finally {
+      loading.value = false;
     }
   }
 
