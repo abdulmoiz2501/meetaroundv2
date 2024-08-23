@@ -32,12 +32,12 @@ Column homeHeaderWidget(List<Map<String, String>> items, double itemWidth,
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 13.0.w),
             child: Image.asset(
-              VoidImages.secSplash,
+              VoidImages.coloredAppLogo,
               height: 40.h,
               width: 40.w,
             ),
           ),
-          Text(VoidTexts.meetAround,
+          Text('Dance Around',
               style: GoogleFonts.poppins(
                 textStyle: TextStyle(
                   fontSize: 12.sp,

@@ -16,6 +16,8 @@ class VoidImages {
   static const String getLocation = "assets/images/getLocation.png";
   static const String testImg = "assets/images/testImg.png";
   static const String arImg = "assets/images/arImage.png";
+  static const String appLogo = "assets/images/appLogo.png";
+  static const String coloredAppLogo = "assets/images/coloredAppLogo.png";
 
   /// Icons
   static const String homeIcon = 'assets/icons/homeIcon.png';

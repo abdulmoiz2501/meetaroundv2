@@ -16,17 +16,17 @@ class PastInterectionsView extends GetView<PastInterectionsController> {
       backgroundColor: VoidColors.secondary,
       appBar: AppBar(
         toolbarHeight: 80.h,
-        leading: IconButton(
-          splashRadius: 20.r,
-          icon: Icon(
-            Icons.arrow_back,
-            size: 20.r,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+        // leading: IconButton(
+        //   splashRadius: 20.r,
+        //   icon: Icon(
+        //     Icons.arrow_back,
+        //     size: 20.r,
+        //     color: Colors.white,
+        //   ),
+        //   onPressed: () {
+        //     Get.back();
+        //   },
+        // ),
         title: Text(
           'Past Interactions',
           style: GoogleFonts.poppins(

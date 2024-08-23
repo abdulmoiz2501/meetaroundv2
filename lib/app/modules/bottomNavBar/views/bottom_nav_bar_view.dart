@@ -115,7 +115,7 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
             }),
       ),
       bottomNavigationBar: Container(
-        height: 50.h,
+        height: 60.h,
         decoration: const BoxDecoration(
           color: VoidColors.bottomNavColor,
         ),

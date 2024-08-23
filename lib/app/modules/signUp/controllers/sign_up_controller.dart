@@ -273,7 +273,7 @@ class SignUpController extends GetxController {
             backgroundColor: VoidColors.primary,
             colorText: VoidColors.whiteColor,
             snackPosition: SnackPosition.BOTTOM);
-        Get.toNamed(Routes.SIGN_IN);
+        Get.offAllNamed(Routes.SIGN_IN);
       } else {
         Get.snackbar('Error', parsedResponse['responseDesc'],
             backgroundColor: VoidColors.primary,
@@ -334,32 +334,32 @@ class SignUpController extends GetxController {
     Get.offAllNamed(Routes.SIGN_IN);
   }
 
-  void connectWebSocket() {
-    final channel = WebSocketChannel.connect(
-      Uri.parse('wss://meet-around-apis-production.up.railway.app/ws'),
-    );
-
-    channel.sink.add(jsonEncode({
-      "userId": signInController.userId,
-      "latitude": latitude.value.toString(),
-      "longitude": longitude.value.toString()
-    }));
-
-    channel.stream.listen((message) {
-      webSocketResponse.value = message;
-      print('WebSocket Response: $message');
-    }, onError: (error) {
-      print('WebSocket Error: $error');
-      Get.snackbar('Error', 'WebSocket connection error: $error',
-          backgroundColor: VoidColors.primary,
-          colorText: VoidColors.whiteColor,
-          snackPosition: SnackPosition.BOTTOM);
-    }, onDone: () {
-      print('WebSocket connection closed');
-      Get.snackbar('Info', 'WebSocket connection closed',
-          backgroundColor: VoidColors.primary,
-          colorText: VoidColors.whiteColor,
-          snackPosition: SnackPosition.BOTTOM);
-    });
-  }
+  // void connectWebSocket() {
+  //   final channel = WebSocketChannel.connect(
+  //     Uri.parse('wss://meet-around-apis-production.up.railway.app/ws'),
+  //   );
+  //
+  //   channel.sink.add(jsonEncode({
+  //     "userId": signInController.userId,
+  //     "latitude": latitude.value.toString(),
+  //     "longitude": longitude.value.toString()
+  //   }));
+  //
+  //   channel.stream.listen((message) {
+  //     webSocketResponse.value = message;
+  //     print('WebSocket Response: $message');
+  //   }, onError: (error) {
+  //     print('WebSocket Error: $error');
+  //     Get.snackbar('Error', 'WebSocket connection error: $error',
+  //         backgroundColor: VoidColors.primary,
+  //         colorText: VoidColors.whiteColor,
+  //         snackPosition: SnackPosition.BOTTOM);
+  //   }, onDone: () {
+  //     print('WebSocket connection closed');
+  //     Get.snackbar('Info', 'WebSocket connection closed',
+  //         backgroundColor: VoidColors.primary,
+  //         colorText: VoidColors.whiteColor,
+  //         snackPosition: SnackPosition.BOTTOM);
+  //   });
+  // }
 }

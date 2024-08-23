@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:scratch_project/app/controllers/user_controller.dart';
 import 'package:scratch_project/app/models/user_model.dart';
+import 'package:scratch_project/app/utils/constraints/colors.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -38,10 +39,14 @@ void main() async {
         return GetMaterialApp(
           title: "Application",
           debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: VoidColors.secondary
+          ),
           // initialRoute: AppPages.SPLASH_SCREEN,
-          initialRoute: storedToken != null
-              ? Routes.BOTTOM_NAV_BAR
-              : AppPages.SPLASH_SCREEN,
+          initialRoute: AppPages.SPLASH_SCREEN,
+          // storedToken != null
+          //     ? Routes.BOTTOM_NAV_BAR
+          //     : AppPages.SPLASH_SCREEN,
           getPages: AppPages.routes,
         );
       },

@@ -28,6 +28,7 @@ import 'package:scratch_project/app/utils/constraints/colors.dart';
 
 void showLogoutDialog({
   required VoidCallback onYes,
+  required String title,
   required BuildContext context,
 
 }) {
@@ -49,7 +50,8 @@ void showLogoutDialog({
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Are you sure you\nwant to logout?',
+                    // 'Are you sure you\nwant to logout?',
+                    title,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.roboto(
                         fontSize: 20.sp,

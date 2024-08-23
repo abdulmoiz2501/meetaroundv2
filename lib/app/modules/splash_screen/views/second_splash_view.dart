@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:scratch_project/app/modules/onBoarding/views/onboarding_view.dart';
 import 'package:scratch_project/app/routes/app_pages.dart';
 
@@ -28,26 +29,38 @@ class SecondSplashView extends GetView {
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 35.0.h, horizontal: 20.0.w),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: SizedBox(
-                    height: 118.h,
-                    width: 118.w,
-                    child: Image.asset(VoidImages.secSplash),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 118.h,
+                        width: 118.w,
+                        child: Image.asset(VoidImages.appLogo),
+                      ),
+                      SizedBox(height: 10.0.h),
+                      Text(
+                        VoidTexts.danceAround,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                            fontSize: 28.sp,
+                            color: VoidColors.whiteColor,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
                   ),
                 ),
-
                 CustomButton(
-                    text: VoidTexts.getStarted,
-                    color: VoidColors.whiteColor,
-                    textColor: VoidColors.blackColor,
-                    borderRadius: 24.r,
+                  text: VoidTexts.getStarted,
+                  color: VoidColors.whiteColor,
+                  textColor: VoidColors.blackColor,
+                  borderRadius: 24.r,
                   onPressed: () {
-                      Get.offAll(()=>OnBoardingView());
+                    Get.toNamed(Routes.ONBOARDING);
                   },
                 ),
-
               ],
             ),
           ),

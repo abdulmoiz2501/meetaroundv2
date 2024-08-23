@@ -25,16 +25,16 @@ class ChatScreenView extends GetView<ChatScreenController> {
   AppBar _buildNoMessagesAppBar() {
     return AppBar(
       toolbarHeight: 80.h,
-      leading: IconButton(
-        splashRadius: 20.r,
-        icon: Icon(
-          Icons.arrow_back,
-          size: 20.r,
-        ),
-        onPressed: () {
-          Get.back();
-        },
-      ),
+      // leading: IconButton(
+      //   splashRadius: 20.r,
+      //   icon: Icon(
+      //     Icons.arrow_back,
+      //     size: 20.r,
+      //   ),
+      //   onPressed: () {
+      //     Get.back();
+      //   },
+      // ),
       title: Text(
         'No Messages',
         style: GoogleFonts.poppins(
@@ -61,19 +61,19 @@ class ChatScreenView extends GetView<ChatScreenController> {
   AppBar _buildChatAppBar() {
     return AppBar(
       toolbarHeight: 80.h,
-      leading: IconButton(
-        splashRadius: 20.r,
-        icon: Icon(
-          Icons.arrow_back,
-          size: 20.r,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Get.back();
-        },
-      ),
+      // leading: IconButton(
+      //   splashRadius: 20.r,
+      //   icon: Icon(
+      //     Icons.arrow_back,
+      //     size: 20.r,
+      //     color: Colors.white,
+      //   ),
+      //   onPressed: () {
+      //     Get.back();
+      //   },
+      // ),
       title: Text(
-        'Chat',
+        'All Messages',
         style: GoogleFonts.poppins(
           fontSize: 16,
           fontWeight: FontWeight.w600,
@@ -173,8 +173,17 @@ class ChatScreenView extends GetView<ChatScreenController> {
               ),
             ),
           ),
-          Expanded(
-            child: Obx(() => ListView.builder(
+         Expanded(
+            child: Obx(() => controller.chatModels.isEmpty ? Center(
+              child: Text(
+                'No Messages right now!!',
+                style: GoogleFonts.poppins(
+                  fontSize: 15.sp,
+                  color: VoidColors.whiteColor,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ) : ListView.builder(
               padding: EdgeInsets.all(12.h),
               itemCount: controller.chatModels.length, // Placeholder item count
               itemBuilder: (context, index) {

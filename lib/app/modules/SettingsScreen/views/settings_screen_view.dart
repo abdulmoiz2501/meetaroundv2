@@ -8,6 +8,7 @@ import 'package:scratch_project/app/utils/constants.dart';
 import 'package:scratch_project/app/utils/constraints/colors.dart';
 import 'package:scratch_project/app/widgets/custom_switch.dart';
 
+import '../../../routes/app_pages.dart';
 import '../../../widgets/show_logout_dialog.dart';
 import '../controllers/settings_screen_controller.dart';
 
@@ -61,23 +62,38 @@ class SettingsScreenView extends GetView<SettingsScreenController> {
         child: SizedBox(
           height: 500.h,
           child: ListView.builder(
-            itemCount: 8,
+            itemCount: 7,
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  if (index == 2) {
-                    profileScreenController.selectedIndex(1);
+                  if (index == 0) {
+                    Get.toNamed(Routes.NOTIFICATION_SCREEN);
                   }
-                  if (index == 7) {
-                    showLogoutDialog(context: context, onYes: () async {
+                  if (index == 1) {
+                    // Routes.NOTIFICATION_SCREEN;
+                  }
+                  if (index == 2) {
+                    // Get.toNamed(Routes.PROFILE_SCREEN);
+                    // profileScreenController.selectedIndex(1);
+                  }
+                  if (index == 3) {}
+                  if (index == 4) {}
+                  if (index == 5) {
+                    showLogoutDialog(context: context, title:  'Are you sure you\nwant to delete your account?', onYes: () async {
+                      // await controller.logout();
+                      // Get.back();
+                    });
+                  }
+                  if (index == 6) {
+                    showLogoutDialog(context: context, title:  'Are you sure you\nwant to logout?', onYes: () async {
                       await controller.logout();
                       // Get.back();
                     });
                   }
-                  Get.toNamed(settingRoutes[index]);
+                  // Get.toNamed(settingRoutes[index]);
                 },
-                child: Container(
+                child: SizedBox(
                   height: 50.h,
                   width: double.infinity,
                   child: Row(

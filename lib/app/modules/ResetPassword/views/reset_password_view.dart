@@ -22,6 +22,8 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
     final ResetPasswordController resetPasswordController =
         Get.put(ResetPasswordController());
     final SignInController _controller = Get.find<SignInController>();
+    final RxBool _passwordVisible = false.obs;
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Reset Your Password',
@@ -39,49 +41,69 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
               SizedBox(
                 height: 30.h,
               ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 24.w),
+              //   child: Text('Current Password',
+              //       style: GoogleFonts.poppins(
+              //         fontSize: 14.sp,
+              //         fontWeight: FontWeight.w500,
+              //         color: VoidColors.lightGrey3,
+              //       )),
+              // ),
+              // SizedBox(
+              //   height: 10.h,
+              // ),
+              // CustomTextFormField(
+              //     controller: resetPasswordController.currentPasssword,
+              //     obscureText: true,
+              //     suffix: SvgPicture.asset(
+              //       "assets/icons/eye.svg",
+              //       height: 24.h,
+              //       width: 24.w,
+              //       colorFilter: ColorFilter.mode(
+              //           VoidColors.lightGrey4, BlendMode.srcIn),
+              //     )),
+              // SizedBox(
+              //   height: 10.h,
+              // ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Text('Current Password',
+                child: Text('New Password',
                     style: GoogleFonts.poppins(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: VoidColors.lightGrey3,
+                      color: VoidColors.darkGrey,
                     )),
               ),
               SizedBox(
-                height: 10.h,
+                height: 2.h,
               ),
-              CustomTextFormField(
-                  controller: resetPasswordController.currentPasssword,
-                  obscureText: true,
-                  suffix: SvgPicture.asset(
-                    "assets/icons/eye.svg",
-                    height: 24.h,
-                    width: 24.w,
-                    colorFilter: ColorFilter.mode(
-                        VoidColors.lightGrey4, BlendMode.srcIn),
-                  )),
+              Obx(() => CustomTextFormField(
+                // controller: _controller.passwordController,
+                obscureText: !_passwordVisible.value,
+                hint: 'Password',
+                prefix: Icon(Icons.lock_outline,
+                    size: 24.sp, color: VoidColors.darkGrey),
+                isPassword: true,
+                suffix: GestureDetector(
+                  onTap: () {
+                    _passwordVisible.value = !_passwordVisible.value;
+                  },
+                  child: Icon(
+                    _passwordVisible.value
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: VoidColors.darkGrey,
+                    size: 24.sp,
+                  ),
+                ),
+              )),
+              // CustomTextFormField(
+              //   obscureText: false,
+              //   controller: resetPasswordController.password,
+              // ),
               SizedBox(
-                height: 10.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Text('Password',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: VoidColors.lightGrey3,
-                    )),
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              CustomTextFormField(
-                obscureText: false,
-                controller: resetPasswordController.password,
-              ),
-              SizedBox(
-                height: 10.h,
+                height: 20.h,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -89,16 +111,32 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
                     style: GoogleFonts.poppins(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: VoidColors.lightGrey3,
+                      color: VoidColors.darkGrey,
                     )),
               ),
               SizedBox(
-                height: 10.h,
+                height: 2.h,
               ),
-              CustomTextFormField(
-                controller: resetPasswordController.cPassword,
-                obscureText: false,
-              ),
+              Obx(() => CustomTextFormField(
+                // controller: _controller.passwordController,
+                obscureText: !_passwordVisible.value,
+                hint: 'Confirm new password',
+                prefix: Icon(Icons.lock_outline,
+                    size: 24.sp, color: VoidColors.darkGrey),
+                isPassword: true,
+                suffix: GestureDetector(
+                  onTap: () {
+                    _passwordVisible.value = !_passwordVisible.value;
+                  },
+                  child: Icon(
+                    _passwordVisible.value
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: VoidColors.darkGrey,
+                    size: 24.sp,
+                  ),
+                ),
+              )),
               SizedBox(height: 100.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0.w),
@@ -110,10 +148,10 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
                       : CustomButton(
                           text: VoidTexts.signIn,
                           onPressed: () {
-                            _controller.signIn(
-                              _controller.emailController.text,
-                              _controller.passwordController.text,
-                            );
+                            // _controller.signIn(
+                            //   _controller.emailController.text,
+                            //   _controller.passwordController.text,
+                            // );
                           },
                           borderRadius: 24.r,
                         );

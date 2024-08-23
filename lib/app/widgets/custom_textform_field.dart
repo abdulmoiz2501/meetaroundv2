@@ -111,6 +111,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         borderRadius: BorderRadius.circular(16.0.r),
       ),
       child: TextFormField(
+        cursorColor: VoidColors.secondary,
         obscureText: widget.obscureText ? true : false,
         key: widget.key,
         style: widget.textStyle ?? TextStyle(

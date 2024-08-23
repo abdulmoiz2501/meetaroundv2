@@ -30,7 +30,9 @@ class SettingsScreenController extends GetxController {
     box.remove('token');
     box.remove('user');
     final storedToken = box.read('token');
-    await Get.offAllNamed(Routes.SIGN_IN);
+    if (storedToken == null) {
+      await Get.offAllNamed(Routes.SIGN_IN);
+    }
     // if (storedToken == null) {
     //   // Navigate to the Sign-In screen and wait for the navigation to complete
     //   await Get.offAllNamed(Routes.SIGN_IN);
