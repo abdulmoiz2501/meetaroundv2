@@ -342,6 +342,7 @@ class SpotifyWebView extends StatefulWidget {
 class _SpotifyWebViewState extends State<SpotifyWebView> {
   late final WebViewController _controller;
   bool _pageLoaded = false;
+  int _remainingTime = 40;
 
   @override
   void initState() {
@@ -373,10 +374,22 @@ class _SpotifyWebViewState extends State<SpotifyWebView> {
                 tryToPlay();
               })();
             ''');
+            _startCountdown();
           },
         ),
       )
       ..loadRequest(Uri.parse(widget.spotifyUri));
+  }
+
+  void _startCountdown() {
+    Future.delayed(Duration(seconds: 1), () {
+      if (mounted && _remainingTime > 0) {
+        setState(() {
+          _remainingTime--;
+        });
+        _startCountdown();
+      }
+    });
   }
 
   @override
@@ -389,8 +402,17 @@ class _SpotifyWebViewState extends State<SpotifyWebView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        //_showCancelJammingDialog(context);
-        return false;
+        if (_remainingTime > 0) {
+          Get.snackbar(
+            'Please Wait',
+            'Please let the song complete before going back. $_remainingTime seconds remaining.',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+          );
+          return false;
+        }
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -447,7 +469,7 @@ class _SpotifyWebViewState extends State<SpotifyWebView> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Cancel Jamming'),
-          content: Text('Do you really want to cancel jamming?'),
+          content: Text('Do you really want to cancel jamming?', style: TextStyle(color: Colors.black)),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -461,7 +483,7 @@ class _SpotifyWebViewState extends State<SpotifyWebView> {
                 Navigator.of(context).pop(); // Dismiss the dialog
                 Get.back(); // Go back to the previous screen
               },
-              child: Text('Yes'),
+              child: Text('Yes', style: TextStyle(color: Colors.red)),
             ),
           ],
         );
