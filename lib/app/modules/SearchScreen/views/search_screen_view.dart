@@ -3,7 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scratch_project/app/controllers/jam_controller.dart';
 import 'package:scratch_project/app/controllers/websocket_controller.dart';
+import 'package:scratch_project/app/modules/JammingScreen/views/jamming_in_progress_view.dart';
+import 'package:scratch_project/app/modules/JammingScreen/views/jamming_waiting_screen.dart';
 
 import '../../../controllers/user_controller.dart';
 import '../../../widgets/custom_appbar.dart';
@@ -677,6 +680,21 @@ class _SearchScreenState extends State<SearchScreen> {
                                                               .user.value.id
                                                               .toString(),
                                                           user.id.toString(),
+                                                        );
+                                                        final JamController
+                                                            jamController =
+                                                            Get.put(
+                                                                JamController());
+                                                        jamController
+                                                                .otherUserId
+                                                                .value =
+                                                            user.id.toString();
+                                                        Get.to(
+                                                          () =>
+                                                              JammingWaitingScreen(
+                                                            userId: user.id
+                                                                .toString(),
+                                                          ),
                                                         );
 
                                                         // searchScreenController.toggleChatMusic();

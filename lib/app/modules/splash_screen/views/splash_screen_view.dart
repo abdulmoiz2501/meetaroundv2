@@ -11,7 +11,6 @@ import 'package:scratch_project/app/utils/constraints/text_strings.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/splash_screen_controller.dart';
 
-
 class SplashScreenView extends StatefulWidget {
   const SplashScreenView({super.key});
 
@@ -20,14 +19,14 @@ class SplashScreenView extends StatefulWidget {
 }
 
 class _SplashScreenViewState extends State<SplashScreenView> {
-
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 2), () {
-      Get.offAll(()=>SecondSplashView());
+      Get.offAll(() => SecondSplashView());
+      // Get.offAll(const JammingInProgressView());
     });
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,8 +57,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
                   style: GoogleFonts.poppins(
                       fontSize: 30.spMax,
                       color: VoidColors.whiteColor,
-                      fontWeight: FontWeight.w600
-                  ),
+                      fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -69,4 +67,3 @@ class _SplashScreenViewState extends State<SplashScreenView> {
     );
   }
 }
-
