@@ -70,20 +70,25 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
                     );
                   });
                 } else if (message['status'] == 'accept') {
-                  print('////this message is accepted $message');
-                  final JamController jamController = Get.find();
-                  jamController.otherUserId.value =
-                      message['userId'].toString();
-                  jamController.isAccepted.value = true;
-                  jamController.jamData.value = message;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    print('////this message is accepted $message');
+                    final JamController jamController = Get.find();
+                    jamController.otherUserId.value =
+                        message['userId'].toString();
+                    jamController.isAccepted.value = true;
+                    jamController.jamData.value = message;
+                  });
                 } else if (message['status'] == 'reject') {
-                  print('////this message is rejected $message');
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    print('////this message is rejected $message');
 
-                  final JamController jamController = Get.find();
-                  jamController.otherUserId.value =
-                      message['userId'].toString();
-                  jamController.isAccepted.value = false;
-                  jamController.jamData.value = message;
+                    final JamController jamController = Get.find();
+                    jamController.otherUserId.value =
+                        message['userId'].toString();
+                    jamController.isAccepted.value = false;
+                    jamController.jamData.value = message;
+                  });
+
                   // print(
                   //     'This is the isAccepted value: ${jamController.isAccepted}');
                 }

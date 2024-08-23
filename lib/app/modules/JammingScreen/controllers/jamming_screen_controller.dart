@@ -24,14 +24,14 @@ class JammingScreenController extends GetxController {
   var filteredTracks = [].obs;
 
   //late WebSocketChannel channel;
-  final int userId;
-  int? targetUserId;
+  // final int userId;
+  // int? targetUserId;
 
   // Constructor
-  JammingScreenController({required this.userId, this.targetUserId}) {
-    print(
-        "JammingScreenController initialized with userId:$userId and targetUserId: $targetUserId");
-  } /* final int userId;
+  //JammingScreenController() {}
+  // print(
+  //     "JammingScreenController initialized with userId:$userId and targetUserId: $targetUserId");
+  /* final int userId;
 
   final int targetUserId;
 
@@ -282,8 +282,8 @@ class JammingScreenController extends GetxController {
   }
 
   Future<void> fetchSpotifyTracks() async {
-    print("The user id that send request is: $userId");
-    print("The target user id is: $targetUserId");
+    // print("The user id that send request is: $userId");
+    // print("The target user id is: $targetUserId");
     try {
       isLoading.value = true;
       final response = await http.get(
@@ -487,8 +487,3 @@ class _SpotifyWebViewState extends State<SpotifyWebView> {
     });
   }
 }
-
-
-
-
-

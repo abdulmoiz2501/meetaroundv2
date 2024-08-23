@@ -41,20 +41,23 @@ class _JammingWaitingScreenState extends State<JammingWaitingScreen> {
             print('The value is null');
           } else if (jamController.isAccepted.value == true) {
             print('The value now is true');
-            Get.to(JammingScreenView(
-              userId: userController.user.value.id,
-              targetUserId: int.parse(jamController.otherUserId.value),
-            ));
+            Get.to(() => JammingScreenView(
+                  userId: userController.user.value.id,
+                  targetUserId: int.parse(jamController.otherUserId.value),
+                ));
           } else if (jamController.isAccepted.value == false) {
-            print('The value is now false');
-            Get.snackbar(
-              'Request Denied',
-              'Your jamming request was not accepted.',
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.redAccent,
-              colorText: Colors.white,
-            );
+            print('The value is false');
             Get.back();
+
+            Future.delayed(Duration(milliseconds: 100), () {
+              Get.snackbar(
+                'Request Denied',
+                'Your jamming request was not accepted.',
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.redAccent,
+                colorText: Colors.white,
+              );
+            });
           }
         });
 

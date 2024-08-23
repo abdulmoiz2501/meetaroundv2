@@ -144,10 +144,13 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.JAMMING_SCREEN,
-      page: () => JammingScreenView(userId: Get.arguments['userId'], targetUserId: Get.arguments['targetUserId'],),
+      page: () => JammingScreenView(
+        userId: Get.arguments['userId'],
+        targetUserId: Get.arguments['targetUserId'],
+      ),
       binding: BindingsBuilder(() {
         Get.lazyPut<JammingScreenController>(() {
-          return JammingScreenController(userId: Get.arguments['userId'], targetUserId: Get.arguments['targetUserId']);
+          return JammingScreenController();
         });
       }),
     ),
