@@ -10,7 +10,7 @@ class JammingScreenBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<JammingScreenController>(
-          () => JammingScreenController(userId: Get.arguments['userId'], targetUserId: Get.arguments['targetUserId']),
+      () => JammingScreenController(),
     );
   }
 }

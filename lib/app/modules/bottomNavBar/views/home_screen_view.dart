@@ -45,8 +45,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       });
     });
 
-    Get.lazyPut<JammingScreenController>(
-        () => JammingScreenController(userId: userController.user.value.id));
+    Get.lazyPut<JammingScreenController>(() => JammingScreenController());
 
     final SearchScreenController searchScreenController =
         Get.put(SearchScreenController());
@@ -195,23 +194,21 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                 final filteredUsers = _filterUsersWithinRadius();
                 return homeHeaderWidget(
                   filteredUsers
-                      .map((user) =>
-                  {
-                    'image': user.profilePicture != null &&
-                        user.profilePicture!.isNotEmpty
-                        ? user.profilePicture!
-                        : VoidImages.testImg,
-                    'name': user.name ?? 'Unknown',
-                  })
+                      .map((user) => {
+                            'image': user.profilePicture != null &&
+                                    user.profilePicture!.isNotEmpty
+                                ? user.profilePicture!
+                                : VoidImages.testImg,
+                            'name': user.name ?? 'Unknown',
+                          })
                       .toList() as List<Map<String, String>>,
                   100.0,
-                      () {
+                  () {
                     Get.toNamed(Routes.SUGGESTED_PEOPLE);
                   },
                   VoidTexts.suggestPeople,
                 );
-              }
-              ),
+              }),
             SizedBox(
               height: 20.h,
             ),

@@ -5,7 +5,6 @@ import '../../../controllers/user_controller.dart';
 import '../../../models/user_model.dart';
 
 class BottomNavBarController extends GetxController {
-
   var selectedIndex = 0.obs;
 
   void changeIndex(int index) {
@@ -24,8 +23,7 @@ class BottomNavBarController extends GetxController {
     if (storedToken != null && storedUserData != null) {
       userController.token.value = storedToken;
       userController.user.value = UserModel.fromJson(storedUserData);
+      print('????????//${userController.user.value.name}');
     }
   }
-
-
 }
