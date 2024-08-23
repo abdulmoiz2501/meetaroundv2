@@ -18,61 +18,76 @@ class JammingInProgressView extends StatefulWidget {
 }
 
 class _JammingInProgressViewState extends State<JammingInProgressView> {
-  final JamController jamController = Get.find();
+  final JamController jamController =
+      Get.isRegistered() ? Get.find() : Get.put(JamController());
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    jamController.resetValues();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Obx(() {
-        if (jamController.gotUrl.value != null) {
-          if (jamController.gotUrl.value == true) {
-            final JammingScreenController jammingScreenController =
-                Get.isRegistered()
-                    ? Get.find()
-                    : Get.put(JammingScreenController());
-            print(
-                '//////////This is the url: ${jamController.jamData['spotifyUrl']}////////');
-            jammingScreenController
-                .openSpotifyTrack(jamController.jamData['songUrl']);
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
+      child: Scaffold(
+        body: Obx(() {
+          if (jamController.gotUrl.value != null) {
+            if (jamController.gotUrl.value == true) {
+              final JammingScreenController jammingScreenController =
+                  Get.isRegistered()
+                      ? Get.find()
+                      : Get.put(JammingScreenController());
+              print(
+                  '//////////This is the url: ${jamController.jamData['spotifyUrl']}////////');
+              jammingScreenController
+                  .openSpotifyTrack(jamController.jamData['songUrl']);
+            }
           }
-        }
-        return Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [VoidColors.primary, VoidColors.secondary],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 35.0.h, horizontal: 10.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 100.h,
-                      width: 100.w,
-                      child: Lottie.asset('assets/icons/UQejRQZqHg.json'),
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      VoidTexts.jammingInProgress,
-                      style: GoogleFonts.poppins(
-                          fontSize: 18.spMax,
-                          color: VoidColors.whiteColor,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
+          return Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [VoidColors.primary, VoidColors.secondary],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
-          ),
-        );
-      }),
+            child: Center(
+              child: Padding(
+                padding:
+                    EdgeInsets.symmetric(vertical: 35.0.h, horizontal: 10.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 100.h,
+                        width: 100.w,
+                        child: Lottie.asset('assets/icons/UQejRQZqHg.json'),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        VoidTexts.jammingInProgress,
+                        style: GoogleFonts.poppins(
+                            fontSize: 18.spMax,
+                            color: VoidColors.whiteColor,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
     );
   }
 }
