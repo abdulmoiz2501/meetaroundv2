@@ -43,17 +43,18 @@ class JammingScreenView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 80.h,
-          leading: IconButton(
-            splashRadius: 20.r,
-            icon: Icon(
-              Icons.arrow_back,
-              size: 20.r,
-              color: VoidColors.whiteColor,
-            ),
-            onPressed: () {
-              Get.back();
-            },
-          ),
+          automaticallyImplyLeading: false,
+          // leading: IconButton(
+          //   splashRadius: 20.r,
+          //   icon: Icon(
+          //     Icons.arrow_back,
+          //     size: 20.r,
+          //     color: VoidColors.whiteColor,
+          //   ),
+          //   onPressed: () {
+          //     // Get.back();
+          //   },
+          // ),
           title: Obx(
             () => controller.isSearching.value
                 ? TextField(
@@ -314,6 +315,7 @@ class JammingScreenView extends StatelessWidget {
                             );
                             controller.setSelectedSongIndex(index);
                             controller.setSelectedSong(playlist['name']);
+
                             controller.openSpotifyTrack(playlist['uri']);
                           },
                           child: Container(

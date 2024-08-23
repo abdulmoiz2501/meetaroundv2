@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -21,6 +23,27 @@ class _JammingInProgressViewState extends State<JammingInProgressView> {
   final JamController jamController =
       Get.isRegistered() ? Get.find() : Get.put(JamController());
 
+  int _secondsRemaining = 30; // Set the initial countdown time
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer(); // Start the countdown when the screen is initialized
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_secondsRemaining > 0) {
+        setState(() {
+          _secondsRemaining--;
+        });
+      } else {
+        _timer?.cancel(); // Stop the timer when the countdown is complete
+      }
+    });
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -32,7 +55,18 @@ class _JammingInProgressViewState extends State<JammingInProgressView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return true;
+        if (_secondsRemaining > 0) {
+          Get.snackbar(
+            'Please wait',
+            'You can go back in $_secondsRemaining seconds.',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+          );
+          return false; // Prevent going back
+        } else {
+          return true; // Allow going back after 30 seconds
+        }
       },
       child: Scaffold(
         body: Obx(() {
@@ -44,8 +78,9 @@ class _JammingInProgressViewState extends State<JammingInProgressView> {
                       : Get.put(JammingScreenController());
               print(
                   '//////////This is the url: ${jamController.jamData['spotifyUrl']}////////');
-              jammingScreenController
-                  .openSpotifyTrack(jamController.jamData['songUrl']);
+              final String url = jamController.jamData['songUrl'];
+
+              jammingScreenController.openSpotifyTrack(url);
             }
           }
           return Container(

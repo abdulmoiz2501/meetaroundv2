@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:scratch_project/app/controllers/jam_controller.dart';
+import 'package:scratch_project/app/modules/bottomNavBar/views/bottom_nav_bar_view.dart';
+import 'package:scratch_project/app/utils/constraints/colors.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -411,18 +414,25 @@ class _SpotifyWebViewState extends State<SpotifyWebView> {
             colorText: Colors.white,
           );
           return false;
+        } else {
+          final JamController jamController = Get.find();
+          jamController.resetValues();
+          Get.offAll(() => BottomNavBarView());
+          return true;
         }
-        return true;
       },
       child: Scaffold(
         appBar: AppBar(
           title: Text("Spotify"),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              _showCancelJammingDialog(context);
-            },
-          ),
+          centerTitle: true,
+          backgroundColor: VoidColors.primary,
+          automaticallyImplyLeading: false,
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back),
+          //   onPressed: () {
+          //     _showCancelJammingDialog(context);
+          //   },
+          // ),
         ),
         body: Stack(
           children: [
@@ -469,19 +479,22 @@ class _SpotifyWebViewState extends State<SpotifyWebView> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Cancel Jamming'),
-          content: Text('Do you really want to cancel jamming?', style: TextStyle(color: Colors.black)),
+          content: Text('Do you really want to cancel jamming?',
+              style: TextStyle(color: Colors.black)),
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Dismiss the dialog
+                Navigator.of(context).pop();
               },
               child: Text('No'),
             ),
             TextButton(
               onPressed: () {
                 _stopJamming();
-                Navigator.of(context).pop(); // Dismiss the dialog
-                Get.back(); // Go back to the previous screen
+                final JamController jamController = Get.find();
+                jamController.resetValues();
+                Navigator.of(context).pop();
+                Get.offAll(() => BottomNavBarView());
               },
               child: Text('Yes', style: TextStyle(color: Colors.red)),
             ),

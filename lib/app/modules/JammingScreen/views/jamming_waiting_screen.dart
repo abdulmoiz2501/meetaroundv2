@@ -24,7 +24,6 @@ class _JammingWaitingScreenState extends State<JammingWaitingScreen> {
   final UserController userController = Get.find();
   int _remainingTime = 30;
 
-
   @override
   void initState() {
     super.initState();
@@ -48,8 +47,6 @@ class _JammingWaitingScreenState extends State<JammingWaitingScreen> {
     jamController.resetValues();
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +73,7 @@ class _JammingWaitingScreenState extends State<JammingWaitingScreen> {
               print('The value is null');
             } else if (jamController.isAccepted.value == true) {
               print('The value now is true');
+
               Get.to(() => JammingScreenView(
                     userId: userController.user.value.id,
                     targetUserId: int.parse(jamController.otherUserId.value),
@@ -107,7 +105,8 @@ class _JammingWaitingScreenState extends State<JammingWaitingScreen> {
             ),
             child: Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 35.0.h, horizontal: 10.w),
+                padding:
+                    EdgeInsets.symmetric(vertical: 35.0.h, horizontal: 10.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
