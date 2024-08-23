@@ -34,79 +34,86 @@ class JammingScreenView extends StatelessWidget {
       // controller.sendJammingRequest(targetUserId); // Call the function with the targetUserId
     });
 
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80.h,
-        leading: IconButton(
-          splashRadius: 20.r,
-          icon: Icon(
-            Icons.arrow_back,
-            size: 20.r,
-            color: VoidColors.whiteColor,
-          ),
-          onPressed: () {
-            Get.back();
-          },
-        ),
-        title: Obx(
-          () => controller.isSearching.value
-              ? TextField(
-                  onChanged: (value) {
-                    controller.filterSongs(value);
-                  },
-                  autofocus: true,
-                  style: GoogleFonts.poppins(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                    color: VoidColors.whiteColor,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Search Songs',
-                    hintStyle: GoogleFonts.poppins(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                      color: VoidColors.whiteColor.withOpacity(0.7),
-                    ),
-                    border: InputBorder.none,
-                  ),
-                )
-              : Text(
-                  "Jamming session",
-                  style: GoogleFonts.poppins(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                    color: VoidColors.whiteColor,
-                  ),
-                ),
-        ),
-        actions: [
-          IconButton(
+    return WillPopScope(
+      onWillPop: () async {
+        // Call the function to cancel the jamming request
+        // controller.cancelJammingRequest(targetUserId); // Call the function with the targetUserId
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 80.h,
+          leading: IconButton(
+            splashRadius: 20.r,
             icon: Icon(
-              Icons.search,
+              Icons.arrow_back,
+              size: 20.r,
               color: VoidColors.whiteColor,
             ),
             onPressed: () {
-              controller.toggleSearch();
+              Get.back();
             },
           ),
-        ],
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            color: VoidColors.primary,
+          title: Obx(
+            () => controller.isSearching.value
+                ? TextField(
+                    onChanged: (value) {
+                      controller.filterSongs(value);
+                    },
+                    autofocus: true,
+                    style: GoogleFonts.poppins(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: VoidColors.whiteColor,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'Search Songs',
+                      hintStyle: GoogleFonts.poppins(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: VoidColors.whiteColor.withOpacity(0.7),
+                      ),
+                      border: InputBorder.none,
+                    ),
+                  )
+                : Text(
+                    "Jamming session",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: VoidColors.whiteColor,
+                    ),
+                  ),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.search,
+                color: VoidColors.whiteColor,
+              ),
+              onPressed: () {
+                controller.toggleSearch();
+              },
+            ),
+          ],
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              color: VoidColors.primary,
+            ),
           ),
         ),
-      ),
-      body: GestureDetector(
-        onTap: () {
-          if (controller.isSearching.value) {
-            controller.toggleSearch();
-            controller.clearSearch();
-          }
-        },
-        child: Obx(
-          () => controller.isLoading.value
-              ? buildShimmerLoading()
-              : buildContent(),
+        body: GestureDetector(
+          onTap: () {
+            if (controller.isSearching.value) {
+              controller.toggleSearch();
+              controller.clearSearch();
+            }
+          },
+          child: Obx(
+            () => controller.isLoading.value
+                ? buildShimmerLoading()
+                : buildContent(),
+          ),
         ),
       ),
     );

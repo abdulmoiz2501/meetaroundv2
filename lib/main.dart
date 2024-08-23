@@ -26,6 +26,8 @@ void main() async {
     print('This is the user ${user.runtimeType}');
     userController.user.value = UserModel.fromJson(user);
     print('this is the user id ${userController.user.value.id}');
+    userController.token.value = storedToken;
+    print('This is the user token ${userController.token.value}');
   }
 
   runApp(

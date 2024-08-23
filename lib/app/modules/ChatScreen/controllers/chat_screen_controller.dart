@@ -5,7 +5,9 @@ import 'package:scratch_project/app/models/chat_model.dart';
 import 'package:scratch_project/app/utils/constraints/colors.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_client/web_socket_client.dart';
+
 var chatCntr = Get.find<ChatScreenController>();
+
 class ChatScreenController extends GetxController {
   RxList<ChatModel> chatModels = RxList<ChatModel>([]);
   var userController = Get.find<UserController>();
@@ -26,21 +28,21 @@ class ChatScreenController extends GetxController {
       Uri.parse('wss://meet-around-apis-production.up.railway.app/chat'),
     );
     Future.delayed(const Duration(seconds: 5), () {
-      channel.send('{"type": "init","userId": ${userController.user.value.id}}');
-      print("::: User id while connecting to websocket ${userController.user.value.id}");
+      channel
+          .send('{"type": "init","userId": ${userController.user.value.id}}');
+      print(
+          "::: User id while connecting to websocket ${userController.user.value.id}");
     });
 
     channel.messages.listen((message) {
-      // Handling incoming messages
       if (message != '{"type":"init"}') {
         print('::: WebSocket connection status: ${channel.connection.state}');
         print('::: WebSocket Response: $message');
 
         if (message.startsWith('[')) {
           List<dynamic> jsonResponse = jsonDecode(message);
-          List<ChatModel> parsedChatModels = jsonResponse
-              .map((json) => ChatModel.fromJson(json))
-              .toList();
+          List<ChatModel> parsedChatModels =
+              jsonResponse.map((json) => ChatModel.fromJson(json)).toList();
 
           chatModels.addAll(parsedChatModels);
         } else {
@@ -49,20 +51,22 @@ class ChatScreenController extends GetxController {
 
           int receiverId = jsonResponse['receiverId'];
 
-          if(receiverId == userController.user.value.id){
+          if (receiverId == userController.user.value.id) {
             int senderId = jsonResponse['senderId'];
             print("The response is $receiverId");
-           chatModels.firstWhereOrNull(
-              (model) => model.receiverId == senderId)?.messages?.add(newMessage);
-              chatModels.refresh();
-          }else{
+            chatModels
+                .firstWhereOrNull((model) => model.receiverId == senderId)
+                ?.messages
+                ?.add(newMessage);
+            chatModels.refresh();
+          } else {
             print("The response is $receiverId");
-           chatModels.firstWhereOrNull(
-              (model) => model.receiverId == receiverId)?.messages?.add(newMessage);
-              chatModels.refresh();
+            chatModels
+                .firstWhereOrNull((model) => model.receiverId == receiverId)
+                ?.messages
+                ?.add(newMessage);
+            chatModels.refresh();
           }
-
-          
         }
       }
     }, onError: (error) {
