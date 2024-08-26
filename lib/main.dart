@@ -21,11 +21,13 @@ void main() async {
   final box = GetStorage();
   final storedToken = box.read('token');
   final user = box.read('user');
+  final TrackController trackController =
+      Get.put(TrackController(), permanent: true);
+
   if (user != null) {
     final UserController userController =
         Get.put(UserController(), permanent: true);
 
-    Get.put(TrackController(), permanent: true);
     print('This is the user ${user.runtimeType}');
     userController.user.value = UserModel.fromJson(user);
     print('this is the user id ${userController.user.value.id}');

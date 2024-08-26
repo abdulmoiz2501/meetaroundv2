@@ -190,6 +190,7 @@ class BottomNavBarView extends GetView<BottomNavBarController> {
                     trackController.isJammingScreenViewOpen.value = false;
 
                     // Get.offAll(() => BottomNavBarView());
+
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) => BottomNavBarView()),

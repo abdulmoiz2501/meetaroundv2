@@ -83,7 +83,10 @@ class PastInterectionsView extends GetView<PastInterectionsController> {
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               child: Obx(() {
                 if (controller.isLoading.value && controller.users.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    color: VoidColors.primary,
+                  ));
                 }
                 if (controller.filteredUsers.isEmpty) {
                   return RefreshIndicator(

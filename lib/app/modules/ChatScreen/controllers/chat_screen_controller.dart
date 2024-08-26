@@ -22,6 +22,15 @@ class ChatScreenController extends GetxController {
     super.onInit();
   }
 
+  ChatModel? findChatModelByReceiverId(int receiverId) {
+    for (var chatModel in chatModels) {
+      if (chatModel.receiverId == receiverId) {
+        return chatModel;
+      }
+    }
+    return null;
+  }
+
   void connectWebSocket() {
     print("::: inside connect web socket");
     channel = WebSocket(

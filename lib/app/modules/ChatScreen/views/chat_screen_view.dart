@@ -14,10 +14,10 @@ class ChatScreenView extends GetView<ChatScreenController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: VoidColors.secondary,
-      appBar: controller.hasMessages ? _buildChatAppBar() : _buildNoMessagesAppBar(),
-      body: controller.hasMessages
-          ? _buildChatBody()
-          : _buildNoMessagesBody(),
+      appBar: controller.hasMessages
+          ? _buildChatAppBar()
+          : _buildNoMessagesAppBar(),
+      body: controller.hasMessages ? _buildChatBody() : _buildNoMessagesBody(),
     );
   }
 
@@ -173,32 +173,37 @@ class ChatScreenView extends GetView<ChatScreenController> {
               ),
             ),
           ),
-         Expanded(
-            child: Obx(() => controller.chatModels.isEmpty ? Center(
-              child: Text(
-                'No Messages right now!!',
-                style: GoogleFonts.poppins(
-                  fontSize: 15.sp,
-                  color: VoidColors.whiteColor,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-            ) : ListView.builder(
-              padding: EdgeInsets.all(12.h),
-              itemCount: controller.chatModels.length, // Placeholder item count
-              itemBuilder: (context, index) {
-                var chatModel = controller.chatModels[index];
-                return ChatListItem(
-                  imageUrl: chatModel.userDetails!.profilePicture ?? "", // Placeholder image
-                  name: chatModel.userDetails?.name ?? "UserName",
-                  lastMessage: chatModel.messages?.last.content.toString() ?? "",
-                  time: '11:20am',
-                  coinIcon: 'assets/icons/coin.png',
-                  coins: chatModel.userDetails?.coins ?? 0,
-                  chatModel: chatModel,
-                );
-              },
-            )),
+          Expanded(
+            child: Obx(() => controller.chatModels.isEmpty
+                ? Center(
+                    child: Text(
+                      'No Messages right now!!',
+                      style: GoogleFonts.poppins(
+                        fontSize: 15.sp,
+                        color: VoidColors.whiteColor,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: EdgeInsets.all(12.h).copyWith(bottom: 80.h),
+                    itemCount:
+                        controller.chatModels.length, // Placeholder item count
+                    itemBuilder: (context, index) {
+                      var chatModel = controller.chatModels[index];
+                      return ChatListItem(
+                        imageUrl: chatModel.userDetails!.profilePicture ??
+                            "", // Placeholder image
+                        name: chatModel.userDetails?.name ?? "UserName",
+                        lastMessage:
+                            chatModel.messages?.last.content.toString() ?? "",
+                        time: '11:20am',
+                        coinIcon: 'assets/icons/coin.png',
+                        coins: chatModel.userDetails?.coins ?? 0,
+                        chatModel: chatModel,
+                      );
+                    },
+                  )),
           ),
         ],
       ),

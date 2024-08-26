@@ -39,7 +39,8 @@ class ChatListItem extends StatelessWidget {
             'imgPath': imageUrl,
             'coins': coins,
             "coinIcon": coinIcon,
-            'chatModel': chatModel
+            'chatModel': chatModel,
+            'isFirstTime': false,
           },
         );
       },

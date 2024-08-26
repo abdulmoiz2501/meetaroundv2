@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:scratch_project/app/controllers/jam_controller.dart';
 import 'package:scratch_project/app/controllers/track_controller.dart';
 import 'package:scratch_project/app/controllers/websocket_controller.dart';
+import 'package:scratch_project/app/modules/ChatScreen/controllers/chat_screen_controller.dart';
 import 'package:scratch_project/app/modules/JammingScreen/views/jamming_in_progress_view.dart';
 import 'package:scratch_project/app/modules/JammingScreen/views/jamming_waiting_screen.dart';
 
@@ -625,6 +626,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                                   children: [
                                                     GestureDetector(
                                                       onTap: () {
+                                                        final ChatScreenController
+                                                            chatScreenController =
+                                                            Get.find();
+                                                        final chatmodel =
+                                                            chatScreenController
+                                                                .findChatModelByReceiverId(
+                                                                    user.id);
                                                         searchScreenController
                                                             .toggleChatMusic();
                                                         Get.toNamed(
@@ -638,21 +646,26 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                 user.coins ?? 0,
                                                             "coinIcon":
                                                                 "assets/icons/coin.png",
+                                                            'isFirstTime':
+                                                                chatmodel ==
+                                                                    null,
                                                             'chatModel':
-                                                                ChatModel(
-                                                              receiverId:
-                                                                  user.id,
-                                                              messages: [],
-                                                              userDetails:
-                                                                  UserDetails(
-                                                                coins:
-                                                                    user.coins ??
-                                                                        0,
-                                                                profilePicture:
-                                                                    user.profilePicture,
-                                                                name: user.name,
-                                                              ),
-                                                            ),
+                                                                chatmodel ??
+                                                                    ChatModel(
+                                                                      receiverId:
+                                                                          user.id,
+                                                                      messages: [],
+                                                                      userDetails:
+                                                                          UserDetails(
+                                                                        coins:
+                                                                            user.coins ??
+                                                                                0,
+                                                                        profilePicture:
+                                                                            user.profilePicture,
+                                                                        name: user
+                                                                            .name,
+                                                                      ),
+                                                                    ),
                                                           },
                                                         );
                                                       },
