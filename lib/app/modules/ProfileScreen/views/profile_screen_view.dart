@@ -106,41 +106,41 @@ class EditProfile extends StatelessWidget {
             Center(
               child: Stack(
                 children: [
-                CircleAvatar(
-                radius: 39.r,
-                backgroundColor: VoidColors.grey4,
-                child: Obx(() {
-                  if (controller.pickedImage.value != null) {
-                    return ClipOval(
-                      child: Image.file(
-                        controller.pickedImage.value!,
-                        fit: BoxFit.cover,
-                        width: 78.w,
-                        height: 78.h,
-                      ),
-                    );
-                  } else if (controller.imageFromServer.value.isNotEmpty) {
-                    return ClipOval(
-                      child: Image.network(
-                        controller.imageFromServer.value,
-                        fit: BoxFit.cover,
-                        width: 78.w,
-                        height: 78.h,
-                      ),
-                    );
-                  } else {
-                    return ClipOval(
-                      child: Image.asset(
-                        "assets/images/girl.png",
-                        fit: BoxFit.cover,
-                        width: 78.w,
-                        height: 78.h,
-                      ),
-                    );
-                  }
-                }),
-              ),
-              // Container(
+                  CircleAvatar(
+                    radius: 39.r,
+                    backgroundColor: VoidColors.grey4,
+                    child: Obx(() {
+                      if (controller.pickedImage.value != null) {
+                        return ClipOval(
+                          child: Image.file(
+                            controller.pickedImage.value!,
+                            fit: BoxFit.cover,
+                            width: 78.w,
+                            height: 78.h,
+                          ),
+                        );
+                      } else if (controller.imageFromServer.value.isNotEmpty) {
+                        return ClipOval(
+                          child: Image.network(
+                            controller.imageFromServer.value,
+                            fit: BoxFit.cover,
+                            width: 78.w,
+                            height: 78.h,
+                          ),
+                        );
+                      } else {
+                        return ClipOval(
+                          child: Image.asset(
+                            "assets/images/girl.png",
+                            fit: BoxFit.cover,
+                            width: 78.w,
+                            height: 78.h,
+                          ),
+                        );
+                      }
+                    }),
+                  ),
+                  // Container(
                   //   height: 78.h,
                   //   width: 78.w,
                   //   decoration: const BoxDecoration(
@@ -204,7 +204,7 @@ class EditProfile extends StatelessWidget {
                   width: 20.r,
                 ),
                 Text(
-                  "10",
+                  userController.user.value.coins.toString() ?? '0',
                   style: GoogleFonts.manrope(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
@@ -521,6 +521,7 @@ class ProfilePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('this is the coin of the user ${userController.user.value.coins}');
     return Obx(
       () => SingleChildScrollView(
         child: Padding(
@@ -681,7 +682,9 @@ class ProfilePreview extends StatelessWidget {
                           .contains(musicGeners[index]);
                       return Container(
                         padding: EdgeInsets.symmetric(
-                            vertical: 10.w, horizontal: 10.w,),
+                          vertical: 10.w,
+                          horizontal: 10.w,
+                        ),
                         // height: 28.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50.r),

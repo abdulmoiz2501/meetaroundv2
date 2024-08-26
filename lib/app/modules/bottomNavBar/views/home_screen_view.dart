@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:scratch_project/app/modules/signIn/controllers/sign_in_controller.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:scratch_project/app/controllers/user_controller.dart';
 import 'package:scratch_project/app/models/user_location_model.dart';
@@ -159,6 +160,11 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   }*/
   @override
   Widget build(BuildContext context) {
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   final SignInController signInController =
+    //       Get.isRegistered() ? Get.find() : Get.put(SignInController());
+    //   await signInController.getCurrentLocation();
+    // });
     final filteredUsers = _filterUsersWithinRadius();
 
     return Scaffold(
@@ -249,9 +255,9 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                         zoom: 10,
                       ),
                       myLocationEnabled: true,
-                      circles: Set.from([
+                      circles: {
                         Circle(
-                          circleId: CircleId('currentLocation'),
+                          circleId: const CircleId('currentLocation'),
                           center: locationController.currentPosition.value,
                           radius: 300.r, // Set your desired radius
                           fillColor: Colors.black
@@ -260,7 +266,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                               Colors.black.withOpacity(0.2), // Border color
                           strokeWidth: 0, // Border width
                         ),
-                      ]),
+                      },
                       markers: snapshot.data!,
                     );
                   },

@@ -33,6 +33,8 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     print(json);
+    print('This is the type of the coins: ${json['coins'].runtimeType}');
+    print('This is the coin value${json['coins']}');
     return UserModel(
       id: json['id'],
       name: json['name'],

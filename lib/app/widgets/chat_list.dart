@@ -152,7 +152,7 @@ class ChatListItem2 extends StatelessWidget {
         child: Row(
           children: [
             CircleAvatar(
-              backgroundImage: AssetImage(imageUrl),
+              backgroundImage: NetworkImage(imageUrl),
               radius: 24.r,
             ),
             SizedBox(width: 12.w),

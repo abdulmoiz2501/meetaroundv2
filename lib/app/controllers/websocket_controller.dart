@@ -90,6 +90,21 @@ class WebSocketController extends GetxController {
     }
   }
 
+  void sendCancelJamming(String userId, String targetUserId) {
+    if (isConnected.value) {
+      final payload = jsonEncode({
+        "type": "cancelJamming",
+        "userId": userId,
+        "targetUserId": targetUserId
+      });
+      _channel.sink.add(payload);
+      print("Sent: $payload");
+    } else {
+      print(
+          "WebSocket is not connected, unable to send cancel jamming request");
+    }
+  }
+
   @override
   void onClose() {
     _channel.sink.close();

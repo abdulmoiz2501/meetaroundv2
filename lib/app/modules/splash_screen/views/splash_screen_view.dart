@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scratch_project/app/controllers/user_controller.dart';
+import 'package:scratch_project/app/modules/signIn/controllers/sign_in_controller.dart';
 import 'package:scratch_project/app/modules/splash_screen/views/second_splash_view.dart';
 import 'package:scratch_project/app/utils/constraints/colors.dart';
 import 'package:scratch_project/app/utils/constraints/image_strings.dart';
@@ -22,11 +24,10 @@ class SplashScreenView extends StatefulWidget {
 class _SplashScreenViewState extends State<SplashScreenView> {
   final box = GetStorage();
 
-
   @override
   void initState() {
-
-    Future.delayed(const Duration(seconds: 2), () {
+    super.initState();
+    Future.delayed(const Duration(seconds: 4), () async {
       bool? isSecondSplashShown = box.read('isSecondSplashShown');
 
       if (isSecondSplashShown == null || !isSecondSplashShown) {
@@ -34,6 +35,20 @@ class _SplashScreenViewState extends State<SplashScreenView> {
         box.write('isSecondSplashShown', true);
       } else {
         final storedToken = box.read('token');
+        if (storedToken != null) {
+          final UserController userController = Get.find();
+          final x =
+              await userController.fetchUserById(userController.user.value.id);
+
+          if (x != null) {
+            userController.user.value = x;
+            print(
+                'this is the value of the coin of the user model ${userController.user.value.coins}');
+            final SignInController signInController =
+                Get.isRegistered() ? Get.find() : Get.put(SignInController());
+            await signInController.getCurrentLocation();
+          }
+        }
         storedToken != null
             ? Get.offAllNamed(Routes.BOTTOM_NAV_BAR)
             : Get.offAllNamed(Routes.SIGN_IN);

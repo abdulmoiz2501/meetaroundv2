@@ -9,13 +9,13 @@ void showJammingRequestDialog({
 }) {
   Get.defaultDialog(
     title: "🎸 Jamming Request",
-    titleStyle: TextStyle(
+    titleStyle: const TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.bold,
       color: Colors.black87,
     ),
     middleText: "User $name wants to jam with you. Do you want to accept?",
-    middleTextStyle: TextStyle(
+    middleTextStyle: const TextStyle(
       fontSize: 18,
       color: Colors.black54,
     ),
@@ -39,7 +39,7 @@ void showJammingRequestDialog({
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            child: Text(
+            child: const Text(
               "Reject",
               style: TextStyle(
                 fontSize: 18,
@@ -59,11 +59,9 @@ void showJammingRequestDialog({
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            child: Text(
+            child: const Text(
               "Accept",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white),
+              style: TextStyle(fontSize: 18, color: Colors.white),
             ),
           ),
         ],
