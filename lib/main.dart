@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:scratch_project/app/controllers/track_controller.dart';
 import 'package:scratch_project/app/controllers/user_controller.dart';
 import 'package:scratch_project/app/models/user_model.dart';
 import 'package:scratch_project/app/utils/constraints/colors.dart';
@@ -20,9 +21,13 @@ void main() async {
   final box = GetStorage();
   final storedToken = box.read('token');
   final user = box.read('user');
+  final TrackController trackController =
+      Get.put(TrackController(), permanent: true);
+
   if (user != null) {
     final UserController userController =
         Get.put(UserController(), permanent: true);
+
     print('This is the user ${user.runtimeType}');
     userController.user.value = UserModel.fromJson(user);
     print('this is the user id ${userController.user.value.id}');
@@ -39,9 +44,7 @@ void main() async {
         return GetMaterialApp(
           title: "Application",
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primaryColor: VoidColors.secondary
-          ),
+          theme: ThemeData(primaryColor: VoidColors.secondary),
           // initialRoute: AppPages.SPLASH_SCREEN,
           initialRoute: AppPages.SPLASH_SCREEN,
           // storedToken != null

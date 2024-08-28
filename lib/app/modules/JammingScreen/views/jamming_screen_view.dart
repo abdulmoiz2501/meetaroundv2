@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scratch_project/app/controllers/jam_controller.dart';
+import 'package:scratch_project/app/controllers/track_controller.dart';
 import 'package:scratch_project/app/controllers/user_controller.dart';
 import 'package:scratch_project/app/controllers/websocket_controller.dart';
 import 'package:shimmer/shimmer.dart';
@@ -43,17 +44,18 @@ class JammingScreenView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 80.h,
-          leading: IconButton(
-            splashRadius: 20.r,
-            icon: Icon(
-              Icons.arrow_back,
-              size: 20.r,
-              color: VoidColors.whiteColor,
-            ),
-            onPressed: () {
-              Get.back();
-            },
-          ),
+          automaticallyImplyLeading: false,
+          // leading: IconButton(
+          //   splashRadius: 20.r,
+          //   icon: Icon(
+          //     Icons.arrow_back,
+          //     size: 20.r,
+          //     color: VoidColors.whiteColor,
+          //   ),
+          //   onPressed: () {
+          //     // Get.back();
+          //   },
+          // ),
           title: Obx(
             () => controller.isSearching.value
                 ? TextField(
@@ -312,8 +314,15 @@ class JammingScreenView extends StatelessWidget {
                               playlist['uri'],
                               40,
                             );
+                            final TrackController trackController = Get.find();
+                            trackController.isJammingScreenViewOpen.value =
+                                false;
+                            trackController.isSpotifyScreenOpen.value = true;
+                            print(
+                                '///////this is the sender ${userController.isSender.value}');
                             controller.setSelectedSongIndex(index);
                             controller.setSelectedSong(playlist['name']);
+
                             controller.openSpotifyTrack(playlist['uri']);
                           },
                           child: Container(

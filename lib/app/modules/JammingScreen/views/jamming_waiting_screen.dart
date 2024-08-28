@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:scratch_project/app/controllers/jam_controller.dart';
+import 'package:scratch_project/app/controllers/track_controller.dart';
 import 'package:scratch_project/app/controllers/user_controller.dart';
 import 'package:scratch_project/app/controllers/websocket_controller.dart';
 import 'package:scratch_project/app/modules/JammingScreen/views/jamming_screen_view.dart';
@@ -22,12 +23,14 @@ class _JammingWaitingScreenState extends State<JammingWaitingScreen> {
   final WebSocketController webSocketController = Get.find();
   final JamController jamController = Get.find();
   final UserController userController = Get.find();
-  int _remainingTime = 30;
+  final TrackController trackController = Get.find();
 
+  int _remainingTime = 30;
 
   @override
   void initState() {
     super.initState();
+
     _startCountdown();
   }
 
@@ -45,11 +48,10 @@ class _JammingWaitingScreenState extends State<JammingWaitingScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
+    trackController.isJamWaitingScreenOpen.value = false;
     jamController.resetValues();
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +66,10 @@ class _JammingWaitingScreenState extends State<JammingWaitingScreen> {
             colorText: Colors.white,
           );
           return false;
+        } else {
+          trackController.isJamWaitingScreenOpen.value = false;
+          return true;
         }
-        return true;
       },
       child: Scaffold(
         body: Obx(() {
@@ -76,6 +80,10 @@ class _JammingWaitingScreenState extends State<JammingWaitingScreen> {
               print('The value is null');
             } else if (jamController.isAccepted.value == true) {
               print('The value now is true');
+              trackController.isJamWaitingScreenOpen.value = false;
+
+              trackController.isJammingScreenViewOpen.value = true;
+
               Get.to(() => JammingScreenView(
                     userId: userController.user.value.id,
                     targetUserId: int.parse(jamController.otherUserId.value),
@@ -107,7 +115,8 @@ class _JammingWaitingScreenState extends State<JammingWaitingScreen> {
             ),
             child: Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 35.0.h, horizontal: 10.w),
+                padding:
+                    EdgeInsets.symmetric(vertical: 35.0.h, horizontal: 10.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,

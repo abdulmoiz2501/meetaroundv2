@@ -41,6 +41,7 @@ class ChatDetailScreenView extends StatelessWidget {
     final int coins = arguments['coins'];
     final String coinIcon = arguments['coinIcon'];
     final ChatModel chatModel = arguments['chatModel'];
+    bool isFirstTime = arguments['isFirstTime'];
     var controller = chatCntr;
     var userController = Get.find<UserController>();
     final messageTextEditingController = TextEditingController();
@@ -384,6 +385,10 @@ class ChatDetailScreenView extends StatelessWidget {
                               messageTextEditingController.text.trim(),
                               chatModel.receiverId.toString(),
                               userController.user.value.id.toString());
+                          if (isFirstTime) {
+                            controller.connectWebSocket();
+                            isFirstTime = false;
+                          }
                           messageTextEditingController.clear();
 
                           WidgetsBinding.instance.addPostFrameCallback((_) {

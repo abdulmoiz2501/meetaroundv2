@@ -11,8 +11,8 @@ class UserLocationModel {
   double? latitude;
   double? longitude;
   bool? status;
-  Null? coins;
-  Null? verified;
+  int? coins;
+  int? verified;
 
   UserLocationModel(
       {this.id,
@@ -43,7 +43,7 @@ class UserLocationModel {
     latitude = json['latitude'];
     longitude = json['longitude'];
     status = json['status'];
-    coins = json['coins'];
+    coins = json['coins'] ?? 0;
     verified = json['verified'];
   }
 

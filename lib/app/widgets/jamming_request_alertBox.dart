@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:scratch_project/app/modules/bottomNavBar/views/bottom_nav_bar_view.dart';
 
 void showJammingRequestDialog({
   required String name,
@@ -9,13 +11,13 @@ void showJammingRequestDialog({
 }) {
   Get.defaultDialog(
     title: "🎸 Jamming Request",
-    titleStyle: TextStyle(
+    titleStyle: const TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.bold,
       color: Colors.black87,
     ),
     middleText: "User $name wants to jam with you. Do you want to accept?",
-    middleTextStyle: TextStyle(
+    middleTextStyle: const TextStyle(
       fontSize: 18,
       color: Colors.black54,
     ),
@@ -34,12 +36,12 @@ void showJammingRequestDialog({
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.redAccent,
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(30.r),
               ),
             ),
-            child: Text(
+            child: const Text(
               "Reject",
               style: TextStyle(
                 fontSize: 18,
@@ -54,16 +56,14 @@ void showJammingRequestDialog({
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFFF69B4),
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(30.r),
               ),
             ),
-            child: Text(
+            child: const Text(
               "Accept",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white),
+              style: TextStyle(fontSize: 18, color: Colors.white),
             ),
           ),
         ],

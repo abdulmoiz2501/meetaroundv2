@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scratch_project/app/controllers/jam_controller.dart';
+import 'package:scratch_project/app/controllers/track_controller.dart';
 import 'package:scratch_project/app/controllers/websocket_controller.dart';
+import 'package:scratch_project/app/modules/ChatScreen/controllers/chat_screen_controller.dart';
 import 'package:scratch_project/app/modules/JammingScreen/views/jamming_in_progress_view.dart';
 import 'package:scratch_project/app/modules/JammingScreen/views/jamming_waiting_screen.dart';
 
@@ -102,13 +104,19 @@ class _SearchScreenState extends State<SearchScreen> {
                                 Stack(
                                   children: [
                                     CircleAvatar(
-                                      radius: 33.31.r, // Half of the height/width to achieve the same size
-                                      backgroundImage: user.profilePicture.isEmpty ? AssetImage('assets/images/noimage.png') :
-                                      NetworkImage(user.profilePicture),
-                                      onBackgroundImageError: (error, stackTrace) {
+                                      radius: 33.31
+                                          .r, // Half of the height/width to achieve the same size
+                                      backgroundImage: user
+                                              .profilePicture.isEmpty
+                                          ? AssetImage(
+                                              'assets/images/noimage.png')
+                                          : NetworkImage(user.profilePicture),
+                                      onBackgroundImageError:
+                                          (error, stackTrace) {
                                         AssetImage('assets/images/noimage.png');
                                       },
-                                      backgroundColor: VoidColors.primary, // Transparent background if no image
+                                      backgroundColor: VoidColors
+                                          .primary, // Transparent background if no image
                                       // child: user.profilePicture == null || user.profilePicture.isEmpty
                                       //     ? Image.asset(
                                       //   'assets/images/noimage.png',
@@ -618,6 +626,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                                   children: [
                                                     GestureDetector(
                                                       onTap: () {
+                                                        final ChatScreenController
+                                                            chatScreenController =
+                                                            Get.find();
+                                                        final chatmodel =
+                                                            chatScreenController
+                                                                .findChatModelByReceiverId(
+                                                                    user.id);
                                                         searchScreenController
                                                             .toggleChatMusic();
                                                         Get.toNamed(
@@ -631,21 +646,26 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                 user.coins ?? 0,
                                                             "coinIcon":
                                                                 "assets/icons/coin.png",
+                                                            'isFirstTime':
+                                                                chatmodel ==
+                                                                    null,
                                                             'chatModel':
-                                                                ChatModel(
-                                                              receiverId:
-                                                                  user.id,
-                                                              messages: [],
-                                                              userDetails:
-                                                                  UserDetails(
-                                                                coins:
-                                                                    user.coins ??
-                                                                        0,
-                                                                profilePicture:
-                                                                    user.profilePicture,
-                                                                name: user.name,
-                                                              ),
-                                                            ),
+                                                                chatmodel ??
+                                                                    ChatModel(
+                                                                      receiverId:
+                                                                          user.id,
+                                                                      messages: [],
+                                                                      userDetails:
+                                                                          UserDetails(
+                                                                        coins:
+                                                                            user.coins ??
+                                                                                0,
+                                                                        profilePicture:
+                                                                            user.profilePicture,
+                                                                        name: user
+                                                                            .name,
+                                                                      ),
+                                                                    ),
                                                           },
                                                         );
                                                       },
@@ -705,6 +725,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                 .otherUserId
                                                                 .value =
                                                             user.id.toString();
+                                                        final TrackController
+                                                            trackController =
+                                                            Get.find();
+                                                        trackController
+                                                            .isJamWaitingScreenOpen
+                                                            .value = true;
                                                         Get.to(
                                                           () =>
                                                               JammingWaitingScreen(
