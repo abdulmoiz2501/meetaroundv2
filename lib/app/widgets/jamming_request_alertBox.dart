@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:scratch_project/app/modules/bottomNavBar/views/bottom_nav_bar_view.dart';
 
 void showJammingRequestDialog({
   required String name,
@@ -34,9 +36,9 @@ void showJammingRequestDialog({
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.redAccent,
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(30.r),
               ),
             ),
             child: const Text(
@@ -54,9 +56,9 @@ void showJammingRequestDialog({
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFFF69B4),
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(30.r),
               ),
             ),
             child: const Text(
