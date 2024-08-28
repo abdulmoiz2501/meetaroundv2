@@ -1,32 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:scratch_project/app/modules/ProfileScreen/controllers/profile_screen_controller.dart';
-import 'package:scratch_project/app/routes/app_pages.dart';
-import 'package:scratch_project/app/utils/constants.dart';
-import 'package:scratch_project/app/utils/constraints/text_strings.dart';
-import 'package:scratch_project/app/widgets/popup.dart';
 import '../../../utils/constraints/colors.dart';
-import '../../../utils/constraints/image_strings.dart';
-import '../../../widgets/homeHeaderWidget.dart';
+import '../../../widgets/popup.dart';
+import '../../../controllers/user_controller.dart';
+import '../../../models/user_model.dart';
 
-class SuggestedPeopleView extends GetView {
-  SuggestedPeopleView({super.key});
+class SuggestedPeopleView extends StatelessWidget {
+  final String uid;
+  SuggestedPeopleView(this.uid, {super.key});
 
-  // final List<Map<String, String>> itemsList = List.generate(
-  //   10,
-  //       (index) => {
-  //     'image': VoidImages.testImg,
-  //     'name': 'David $index',
-  //   },
-  // );
+  Future<UserModel?> _fetchUser(
+      int userId, UserController userController) async {
+    return await userController.fetchUserById(userId);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final ProfileScreenController controller =
-        Get.put(ProfileScreenController());
+    final UserController userController = Get.find();
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -44,8 +38,8 @@ class SuggestedPeopleView extends GetView {
                     "assets/icons/left_arrow.svg",
                     height: 16.h,
                     width: 8.w,
-                    colorFilter:
-                        ColorFilter.mode(VoidColors.blackColor, BlendMode.srcIn),
+                    colorFilter: ColorFilter.mode(
+                        VoidColors.blackColor, BlendMode.srcIn),
                   ),
                 ),
               ),
@@ -62,7 +56,7 @@ class SuggestedPeopleView extends GetView {
         ),
         centerTitle: true,
         actions: [
-          Container(
+          /*Container(
             height: 32.h,
             width: 32.w,
             child: Center(
@@ -92,7 +86,7 @@ class SuggestedPeopleView extends GetView {
             padding: EdgeInsets.only(right: 8.w),
             child: GestureDetector(
               onTap: () {
-                Get.toNamed(Routes.SETTINGS_SCREEN);
+                Get.toNamed('/settings'); // Update your routes accordingly
               },
               child: Container(
                 height: 32.h,
@@ -108,285 +102,298 @@ class SuggestedPeopleView extends GetView {
                 ),
               ),
             ),
-          ),
+          ),*/
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(24.h),
-        child: Builder(builder: (context) {
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 85.w,
-                      ),
-                      Container(
-                        height: 90.h,
-                        width: 90.w,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: CircleAvatar(
-                          radius: 40.0.r,
-                          // borderRadius: BorderRadius.circular(100.r),
-                          backgroundImage:  AssetImage(
-                            "assets/images/profile.png",
-                            // fit: BoxFit.cover,
+      body: FutureBuilder<UserModel?>(
+        future: _fetchUser(int.parse(uid), userController),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: VoidColors.secondary,
+              ),
+            );
+          }
+
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text(
+                'Failed to load user data',
+                style: GoogleFonts.poppins(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  color: VoidColors.blackColor,
+                ),
+              ),
+            );
+          }
+
+          final user = snapshot.data!;
+          final String gender = user.gender.toLowerCase();
+          final String genderIcon = gender == 'male'
+              ? 'assets/icons/male.svg'
+              : gender == 'female'
+                  ? 'assets/icons/female.svg'
+                  : 'assets/icons/nogender.svg';
+          final int age =
+              DateTime.now().year - int.parse(user.birthdate.split('/').last);
+
+          return Padding(
+            padding: EdgeInsets.all(24.h),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(width: 40.w),
+                        Container(
+                          height: 90.h,
+                          width: 90.w,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: CircleAvatar(
+                            radius: 40.0.r,
+                            backgroundImage: user.profilePicture.isNotEmpty
+                                ? NetworkImage(user.profilePicture)
+                                : AssetImage("assets/images/profile.png")
+                                    as ImageProvider,
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 40.w,
-                      ),
-                      GestureDetector(
+                        SizedBox(width: 40.w),
+                        /*GestureDetector(
                           onTap: () {
                             showCustomPopup(
-                                height: 239.h,
-                                context: context,
-                                headingText: 'Block Jessica?',
-                                subText: 'This action cannot be undone.',
-                                subText2: "Are you sure you want to proceed?",
-                                buttonText: 'Block',
-                                belowButtonText: 'Cancel',
-                                onButtonPressed: () {
-                                  Get.back();
-                                  showCustomPopup(
-                                      height: 300.h,
+                              height: 239.h,
+                              context: context,
+                              headingText: 'Block ${user.name}?',
+                              subText: 'This action cannot be undone.',
+                              subText2: "Are you sure you want to proceed?",
+                              buttonText: 'Block',
+                              belowButtonText: 'Cancel',
+                              onButtonPressed: () {
+                                Get.back();
+                                showCustomPopup(
+                                  height: 300.h,
+                                  context: context,
+                                  headingText: 'Block ${user.name}?',
+                                  subText:
+                                      'Please send us an email at ..........@gmail.com letting us know the reason why you want to block @jess_56?',
+                                  buttonText: 'Send Email',
+                                  belowButtonText: 'Cancel',
+                                  onButtonPressed: () {
+                                    Get.back();
+                                    showCustomBottomSheet(
                                       context: context,
-                                      headingText: 'Block Jessica?',
+                                      headingText: 'Block ${user.name}?',
                                       subText:
-                                          'Please send us an email at ..........@gmail.com letting us know the reason why do you want to block @jess_56?',
+                                          'Why do you want to block ${user.name}?',
+                                      subText2:
+                                          "Pretending to be someone else?",
                                       buttonText: 'Send Email',
-                                      belowButtonText: 'Cancel',
-                                      onButtonPressed: () {
-                                        Get.back();
-                                        showCustomBottomSheet(
-                                            context: context,
-                                            headingText: 'Block Jessica?',
-                                            subText: 'Why do you want to block jessica ?',
-                                            subText2: "Pretending to be someone else?",
-                                            
-                                            buttonText: 'Send Email',
-                                           // belowButtonText: 'Cancel',
-                                            onButtonPressed: () {},
-                                            
-                                           subText3: 'Pretending to be someone else?', subText4: 'Inappropriate content', subText5: 'They may be under 13', subText6: 'Someone else', smallSubText: 'Your block is anonymous.  User will not get a notification if you block him . ');
-                                      },
-                                      onBelowButtonPressed: () {
-                                        Get.back();
-                                      });
-                                },
-                                onBelowButtonPressed: () {
-                                  Get.back();
-                                });
+                                      onButtonPressed: () {},
+                                      subText3:
+                                          'Pretending to be someone else?',
+                                      subText4: 'Inappropriate content',
+                                      subText5: 'They may be under 13',
+                                      subText6: 'Someone else',
+                                      smallSubText:
+                                          'Your block is anonymous. The user will not get a notification if you block them.',
+                                    );
+                                  },
+                                  onBelowButtonPressed: () {
+                                    Get.back();
+                                  },
+                                );
+                              },
+                              onBelowButtonPressed: () {
+                                Get.back();
+                              },
+                            );
                           },
                           child: SvgPicture.asset(
                             "assets/icons/p_.svg",
                             width: 24.w,
                             height: 24.h,
-                          ))
-                    ],
+                          ),
+                        ),*/
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/icons/coin.png',
-                      height: 20.r,
-                      width: 20.r,
-                    ),
-                    SizedBox(
-                      width: 8.w,
-                    ),
-                    Text(
-                      "10",
-                      style: GoogleFonts.manrope(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        color: VoidColors.blackColor,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  SizedBox(height: 10.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Jessica Sympson",
-                            style: GoogleFonts.manrope(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w400,
-                              color: VoidColors.blackColor,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10.w,
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/icons/female.svg",
-                                  height: 12.h,
-                                  width: 12.w,
-                                ),
-                                Text(
-                                  "Female",
-                                  style: GoogleFonts.manrope(
-                                    fontSize: 10.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: VoidColors.blackColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                      Image.asset(
+                        'assets/icons/coin.png',
+                        height: 20.r,
+                        width: 20.r,
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Center(
-                              child: Text(
-                                "- So be careful, Grumpy Lina",
-                                style: GoogleFonts.manrope(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: VoidColors.blackColor,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "36",
-                                  style: GoogleFonts.manrope(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: VoidColors.blackColor,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                Text(
-                                  "online",
-                                  style: GoogleFonts.manrope(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: VoidColors.green,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                      SizedBox(width: 8.w),
+                      Text(
+                        user.coins?.toString() ?? "0",
+                        style: GoogleFonts.manrope(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: VoidColors.blackColor,
                         ),
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 50.h,
-                ),
-                Container(
-                  height: 278.h,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.r),
-                      child: Image.asset(
-                        "assets/images/girl.png",
-                        fit: BoxFit.cover,
-                      )),
-                ),
-                SizedBox(
-                  height: 40.h,
-                ),
-                Text(
-                  "Music Genres:",
-                  style: GoogleFonts.manrope(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: VoidColors.blackColor,
-                  ),
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40.w),
-                  child: Wrap(
-                    spacing: 10.w,
-                    runSpacing: 10.h,
-                    children: List.generate(musicGeners2.length, (index) {
-                      return GestureDetector(
-                        onTap: () {
-                          controller.toggleMusicGenre(index);
-                        },
-                        child: Obx(() {
-                          bool isSelected =
-                              controller.selectedMusicGenres.contains(index);
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10.w, vertical: 7.w,),
-                            height: 28.h,
-                            // width: 62.w,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50.r),
-                              color: isSelected
-                                  ? VoidColors.secondary
-                                  : VoidColors.whiteColor,
-                              border: Border.all(
+                  SizedBox(height: 10.h),
+                  Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              user.name,
+                              style: GoogleFonts.manrope(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w400,
                                 color: VoidColors.blackColor,
                               ),
                             ),
-                            child: Text(
-                              musicGeners2[index],
-                              style: GoogleFonts.poppins(
-                                fontSize: 10.sp,
-                                fontWeight: FontWeight.w400,
-                                color: isSelected
-                                    ? VoidColors.whiteColor
-                                    : VoidColors.blackColor,
+                            SizedBox(width: 10.w),
+                            Container(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    genderIcon,
+                                    height: 12.h,
+                                    width: 12.w,
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  Text(
+                                    gender.capitalizeFirst!,
+                                    style: GoogleFonts.manrope(
+                                      fontSize: 10.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: VoidColors.blackColor,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          );
-                        }),
-                      );
-                    }),
+                            )
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+/*                              Center(
+                                child: Text(
+                                  "- So be careful, Grumpy Lina",
+                                  style: GoogleFonts.manrope(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: VoidColors.blackColor,
+                                  ),
+                                ),
+                              ),*/
+                              SizedBox(height: 10.h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "$age",
+                                    style: GoogleFonts.manrope(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: VoidColors.blackColor,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  Text(
+                                    user.status == true ? "online" : "offline",
+                                    style: GoogleFonts.manrope(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: user.status == true
+                                          ? VoidColors.green
+                                          : VoidColors.blackColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 100.h,
-                ),
-              ],
+                  SizedBox(height: 50.h),
+                  Container(
+                    height: 278.h,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.r),
+                      child: Image(
+                        image: user.profilePicture.isNotEmpty
+                            ? NetworkImage(user.profilePicture)
+                            : AssetImage("assets/images/profile.png") as ImageProvider,
+                        fit: BoxFit.cover,
+                      ),
+
+                    ),
+                  ),
+                  SizedBox(height: 40.h),
+                  Text(
+                    "Music Genres:",
+                    style: GoogleFonts.manrope(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      color: VoidColors.blackColor,
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40.w),
+                    child: Wrap(
+                      spacing: 10.w,
+                      runSpacing: 10.h,
+                      children: List.generate(user.interests.length, (index) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 7.w,
+                          ),
+                          height: 28.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.r),
+                            color: VoidColors.whiteColor,
+                            border: Border.all(
+                              color: VoidColors.blackColor,
+                            ),
+                          ),
+                          child: Text(
+                            user.interests[index],
+                            style: GoogleFonts.poppins(
+                              fontSize: 10.sp,
+                              fontWeight: FontWeight.w400,
+                              color: VoidColors.blackColor,
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                  SizedBox(height: 100.h),
+                ],
+              ),
             ),
           );
-        }),
+        },
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
@@ -16,8 +17,15 @@ class LocationController extends GetxController {
   var latitude = 0.0.obs;
   var longitude = 0.0.obs;
   var webSocketResponse = ''.obs;
-  var currentPosition = LatLng(37.7749, -122.4194).obs; // Default to San Francisco
+  var currentPosition = LatLng(37.7749, -122.4194).obs;
   loc.Location location = loc.Location();
+
+
+  var distances = <int, double>{}.obs;
+  var addresses = <int, String>{}.obs;
+  var isDistanceLoading = false.obs;
+  var isAddressLoading = false.obs;
+  var isChat = false.obs;
 
   WebSocketChannel? locationChannel;
   WebSocketChannel? searchChannel;
@@ -96,6 +104,7 @@ class LocationController extends GetxController {
       List<dynamic> jsonResponse = jsonDecode(message);
       List<UserLocationModel> users = jsonResponse.map((userJson) => UserLocationModel.fromJson(userJson)).toList();
       currentUsers.addAll(users);
+      calculateDistancesAndAddressesForUsers();
       users.forEach((user) {
         print("::: User are ${user.toJson()}");
       });
@@ -121,7 +130,70 @@ class LocationController extends GetxController {
     super.onClose();
   }
 
-  // Future<void> getAddressFromLatLng(LatLng position) async {
+  void calculateDistancesAndAddressesForUsers() async {
+    print("::: Calculating distances and addresses");
+    isDistanceLoading(true);
+    isAddressLoading(true);
+
+    double myLat = currentPosition.value.latitude;
+    double myLong = currentPosition.value.longitude;
+
+    for (var user in currentUsers) {
+      if (user.latitude != null && user.longitude != null) {
+        double calculatedDistance = calculateDistance(
+            myLat, myLong, user.latitude!, user.longitude!);
+        distances[user.id!] = calculatedDistance;
+
+        String address = await getAddressFromLatLng(
+            user.latitude!, user.longitude!);
+        addresses[user.id!] = address;
+      }
+    }
+
+    isDistanceLoading(false);
+    isAddressLoading(false);
+  }
+
+  double calculateDistance(
+      double myLat, double myLong, double userLat, double userLong) {
+    const double earthRadius = 6371.0;
+
+    double dLat = _toRadians(userLat - myLat);
+    double dLong = _toRadians(userLong - myLong);
+
+    double a = sin(dLat / 2) * sin(dLat / 2) +
+        cos(_toRadians(myLat)) *
+            cos(_toRadians(userLat)) *
+            sin(dLong / 2) *
+            sin(dLong / 2);
+
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    double calculatedDistance = earthRadius * c;
+    return calculatedDistance;
+  }
+
+  double _toRadians(double degree) {
+    return degree * pi / 180;
+  }
+
+  Future<String> getAddressFromLatLng(double latitude, double longitude) async {
+    try {
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(latitude, longitude);
+      Placemark place = placemarks[0];
+      return "${place.country}, ${place.locality}}";
+    } catch (e) {
+      return "Unknown location";
+    }
+  }
+
+  void toggleChatMusic() {
+    isChat.value = !isChat.value;
+  }
+
+
+// Future<void> getAddressFromLatLng(LatLng position) async {
   //   try {
   //     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
   //     Placemark place = placemarks[0];

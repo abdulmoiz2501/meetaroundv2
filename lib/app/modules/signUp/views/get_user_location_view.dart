@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:scratch_project/app/modules/signUp/views/sign_up_progress_screen.dart';
 import 'package:scratch_project/app/routes/app_pages.dart';
 import 'package:scratch_project/app/utils/constraints/colors.dart';
 import 'package:scratch_project/app/utils/constraints/image_strings.dart';
@@ -33,6 +34,7 @@ class _GetUserLocationViewState extends State<GetUserLocationView> {
           ),
           onPressed: () {
             Get.back();
+            //print("correct screen");
           },
         ),
       ),
@@ -76,6 +78,7 @@ class _GetUserLocationViewState extends State<GetUserLocationView> {
                 text: 'Next',
                 onPressed: () async {
                   signUpController.loading.value = true;
+                  Get.to(() => const SignUpInProgressView());
                   try {
                     await signUpController.getCurrentLocation();
                     // await signUpController.signUp();
@@ -84,6 +87,7 @@ class _GetUserLocationViewState extends State<GetUserLocationView> {
                     Get.snackbar('Error', e.toString());
                   } finally {
                     signUpController.loading.value = false;
+                    Get.offAllNamed(Routes.SIGN_IN);
                   }
                 },
                 borderRadius: 24.r,

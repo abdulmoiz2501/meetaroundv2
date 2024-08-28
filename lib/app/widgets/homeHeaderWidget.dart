@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../modules/bottomNavBar/views/suggested_people_view.dart';
 import '../utils/constraints/colors.dart';
 import '../utils/constraints/image_strings.dart';
 import '../utils/constraints/text_strings.dart';
@@ -94,7 +97,12 @@ Column homeHeaderWidget(List<Map<String, String>> items, double itemWidth,
                     return Padding(
                       padding: EdgeInsets.symmetric(horizontal: 7.0.w),
                       child: GestureDetector(
-                        onTap: onTap,
+                        onTap: ()
+                        {
+                          onTap();
+                          Get.to(()=>SuggestedPeopleView(items[index]['uid']!));
+
+                        },
                         child: Column(
                           children: [
                             Expanded(
@@ -145,7 +153,7 @@ Column homeHeaderWidget(List<Map<String, String>> items, double itemWidth,
   );
 }
 
-Column homeHeaderWidget2(List<Map<String, String>> items, double itemWidth,
+/*Column homeHeaderWidget2(List<Map<String, String>> items, double itemWidth,
     VoidCallback onTap, String subTitle,
     {bool? suggested = false}) {
   final ScrollController _scrollController = ScrollController();
@@ -313,4 +321,4 @@ Column homeHeaderWidget2(List<Map<String, String>> items, double itemWidth,
       )
     ],
   );
-}
+}*/

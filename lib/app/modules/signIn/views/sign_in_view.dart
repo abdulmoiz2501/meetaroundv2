@@ -152,7 +152,7 @@ class SignInView extends GetView<SignInController> {
                 ],
               ),
             ),
-            Container(
+/*            Container(
               height: 48.h,
               margin: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 15.0.h),
               width: double.infinity,
@@ -164,7 +164,8 @@ class SignInView extends GetView<SignInController> {
                 child: Image.asset(VoidImages.googleIcon,
                     height: 32.h, width: 32.w),
               ),
-            ),
+            ),*/
+          SizedBox(height: 36),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

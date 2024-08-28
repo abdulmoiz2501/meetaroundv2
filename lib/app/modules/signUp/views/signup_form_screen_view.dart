@@ -247,8 +247,8 @@ class SignupFormScreenView extends GetView<SignUpController> {
                     ),
                   ],
                 ),
-                SizedBox(height: 15.0.h),
-                Container(
+                //SizedBox(height: 15.0.h),
+/*                Container(
                   height: 48.h,
                   margin: EdgeInsets.symmetric(horizontal: 20.0.w),
                   decoration: BoxDecoration(
@@ -262,7 +262,7 @@ class SignupFormScreenView extends GetView<SignUpController> {
                       width: 32.w,
                     ),
                   ),
-                ),
+                ),*/
                 SizedBox(height: 25.0.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

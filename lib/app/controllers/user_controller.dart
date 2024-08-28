@@ -41,6 +41,7 @@ class UserController extends GetxController {
       print('this is the response of tthe fetch user by id: ${jsonResponse}');
 
       if (jsonResponse['responseCode'] == "4000") {
+        print('This is teh user data: ${jsonResponse['data']}');
         final userData = jsonResponse['data'];
         return UserModel.fromJson(userData);
       } else {

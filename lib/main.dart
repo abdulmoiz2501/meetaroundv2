@@ -30,6 +30,14 @@ void main() async {
 
     print('This is the user ${user.runtimeType}');
     userController.user.value = UserModel.fromJson(user);
+    final x = await userController.fetchUserById(userController.user.value.id);
+if(x!=null) {
+  userController.user(x);
+  print('/////THis is the user coins from the fetch user by id in main: ${userController.user.value
+      .coins}');
+
+
+}
     print('this is the user id ${userController.user.value.id}');
     userController.token.value = storedToken;
     print('This is the user token ${userController.token.value}');

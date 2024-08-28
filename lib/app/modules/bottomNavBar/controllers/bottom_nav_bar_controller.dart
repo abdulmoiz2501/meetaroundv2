@@ -15,18 +15,18 @@ class BottomNavBarController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final box = GetStorage();
-    final userController = Get.put(UserController());
-    final ChatScreenController chatScreenController =
-        Get.isRegistered() ? Get.find() : Get.put(ChatScreenController());
-
-    String? storedToken = box.read('token');
-    Map<String, dynamic>? storedUserData = box.read('user');
-
-    if (storedToken != null && storedUserData != null) {
-      userController.token.value = storedToken;
-      userController.user.value = UserModel.fromJson(storedUserData);
-      print('????????//${userController.user.value.name}');
-    }
+    // final box = GetStorage();
+    // final userController = Get.put(UserController());
+    // final ChatScreenController chatScreenController =
+    //     Get.isRegistered() ? Get.find() : Get.put(ChatScreenController());
+    //
+    // String? storedToken = box.read('token');
+    // Map<String, dynamic>? storedUserData = box.read('user');
+    //
+    // if (storedToken != null && storedUserData != null) {
+    //   userController.token.value = storedToken;
+    //   userController.user.value = UserModel.fromJson(storedUserData);
+    //   print('????????//${userController.user.value.name}');
+    // }
   }
 }

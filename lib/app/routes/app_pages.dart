@@ -127,11 +127,11 @@ class AppPages {
       page: () => HomeScreenView(),
       binding: BottomNavBarBinding(),
     ),
-    GetPage(
+   /* GetPage(
       name: _Paths.SUGGESTED_PEOPLE,
       page: () => SuggestedPeopleView(),
       binding: BottomNavBarBinding(),
-    ),
+    ),*/
     GetPage(
       name: _Paths.CHAT_SCREEN,
       page: () => ChatScreenView(),

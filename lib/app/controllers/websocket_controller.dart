@@ -7,7 +7,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 class WebSocketController extends GetxController {
   late WebSocketChannel _channel;
-  final UserController userController = Get.put(UserController());
+  final UserController userController = Get.isRegistered()? Get.find(): Get.put(UserController());
 
   var isConnected = false.obs;
 

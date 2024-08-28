@@ -400,11 +400,11 @@ class _SpotifyWebViewState extends State<SpotifyWebView> {
         final JamController jamController = Get.find();
         final UserController userController = Get.find();
         _stopJamming();
-
+        await jamController.completeJamming(
+            userController.user.value.id);
         if (userController.isSender.value != null &&
             userController.isSender.value == true) {
-          await jamController.completeJamming(
-              userController.user.value.id, jamController.otherUserId.value);
+
           await jamController.interactJamming(
               userController.user.value.id, jamController.otherUserId.value);
         }
@@ -443,11 +443,13 @@ class _SpotifyWebViewState extends State<SpotifyWebView> {
           _stopJamming();
 
           trackController.isSpotifyScreenOpen.value = false;
+          await jamController.completeJamming(
+              userController.user.value.id,);
 
           if (userController.isSender.value != null &&
               userController.isSender.value == true) {
-            await jamController.completeJamming(
-                userController.user.value.id, jamController.otherUserId.value);
+            // await jamController.completeJamming(
+            //     userController.user.value.id, jamController.otherUserId.value);
             await jamController.interactJamming(
                 userController.user.value.id, jamController.otherUserId.value);
           }

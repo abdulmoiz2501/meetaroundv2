@@ -1,18 +1,24 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scratch_project/app/controllers/jam_controller.dart';
-import 'package:scratch_project/app/controllers/track_controller.dart';
 import 'package:scratch_project/app/controllers/websocket_controller.dart';
-import 'package:scratch_project/app/modules/ChatScreen/controllers/chat_screen_controller.dart';
 import 'package:scratch_project/app/modules/JammingScreen/views/jamming_in_progress_view.dart';
 import 'package:scratch_project/app/modules/JammingScreen/views/jamming_waiting_screen.dart';
+import 'package:scratch_project/app/modules/bottomNavBar/views/suggested_people_view.dart';
 
 import '../../../controllers/user_controller.dart';
+import '../../../models/user_location_model.dart';
+import '../../../widgets/chat_list.dart';
 import '../../../widgets/custom_appbar.dart';
+import '../../ChatScreen/controllers/chat_screen_controller.dart';
 import '../../JammingScreen/controllers/jamming_screen_controller.dart';
+import '../../bottomNavBar/controllers/location_controller.dart';
 import '../controllers/search_screen_controller.dart';
 import '../../../models/chat_model.dart';
 import '../../../routes/app_pages.dart';
@@ -26,16 +32,59 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final SearchScreenController searchScreenController =
-      Get.put(SearchScreenController());
+  /*final SearchScreenController searchScreenController =
+      Get.put(SearchScreenController());*/
+  final LocationController locationController =
+      Get.isRegistered() ? Get.find() : Get.put(LocationController());
   final UserController userController = Get.find();
   final WebSocketController webSocketController = Get.find();
+  List<UserLocationModel> _filterUsersWithinRadius() {
+    final currentPosition = locationController.currentPosition.value;
+    const radiusInMeters = 300.0;
 
-  @override
+    final Set<String> seenIds = {}; // Set to track unique user IDs
+    return locationController.currentUsers.where((user) {
+      if (user.latitude == null || user.longitude == null) {
+        return false;
+      }
+
+      final userPosition = LatLng(user.latitude!, user.longitude!);
+      final distance = _calculateDistance(
+        currentPosition.latitude,
+        currentPosition.longitude,
+        userPosition.latitude,
+        userPosition.longitude,
+      );
+
+      // Only include users within the radius and not seen before
+      final isWithinRadius = distance <= radiusInMeters;
+      final isUniqueUser = seenIds
+          .add(user.id.toString()); // Returns false if already in the set
+
+      return isWithinRadius && isUniqueUser;
+    }).toList();
+  }
+
+  double _calculateDistance(
+      double lat1, double lon1, double lat2, double lon2) {
+    const R = 6371000; // Radius of the Earth in meters
+    final dLat = (lat2 - lat1) * (3.141592653589793 / 180);
+    final dLon = (lon2 - lon1) * (3.141592653589793 / 180);
+    final a = 0.5 -
+        cos(dLat) / 2 +
+        cos(lat1 * (3.141592653589793 / 180)) *
+            cos(lat2 * (3.141592653589793 / 180)) *
+            (1 - cos(dLon)) /
+            2;
+
+    return R * 2 * asin(sqrt(a));
+  }
+
+/*  @override
   void initState() {
     searchScreenController.fetchUsers();
     super.initState();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +94,7 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Container(
         color: VoidColors.whiteColor,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 24.h),
+          padding: EdgeInsets.symmetric(vertical: 46.h),
           child: Column(
             children: [
               Padding(
@@ -80,108 +129,132 @@ class _SearchScreenState extends State<SearchScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.h),
                 child: SizedBox(
-                  height: 100.h,
+                  height: 95.h,
                   child: Obx(() {
-                    if (searchScreenController.isLoading.value) {
-                      return Container(
-                        color: VoidColors.whiteColor,
-                        height: 400.h,
-                        width: 400.w,
-                        child: Center(
-                            child: CircularProgressIndicator(
-                          color: VoidColors.secondary,
-                        )),
+                    final filteredUsers = _filterUsersWithinRadius();
+
+                    if (filteredUsers.isEmpty) {
+                      return Center(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16.0, horizontal: 24.0),
+                          margin: EdgeInsets.all(16.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Text(
+                            'There are currently no users nearby',
+                            style: GoogleFonts.poppins(
+                              color: Colors.black, // Black text color
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       );
                     }
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: searchScreenController.users.map((user) {
-                          return Padding(
-                            padding: EdgeInsets.all(8.h),
-                            child: Column(
-                              children: [
-                                Stack(
+                    return SizedBox(
+                      width: double.infinity,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: filteredUsers.map((user) {
+                            return GestureDetector(
+                              onTap: ()
+                              {
+                                Get.to(()=>SuggestedPeopleView(user.id.toString() ));
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(8.h),
+                                child: Column(
                                   children: [
-                                    CircleAvatar(
-                                      radius: 33.31
-                                          .r, // Half of the height/width to achieve the same size
-                                      backgroundImage: user
-                                              .profilePicture.isEmpty
-                                          ? AssetImage(
-                                              'assets/images/noimage.png')
-                                          : NetworkImage(user.profilePicture),
-                                      onBackgroundImageError:
-                                          (error, stackTrace) {
-                                        AssetImage('assets/images/noimage.png');
-                                      },
-                                      backgroundColor: VoidColors
-                                          .primary, // Transparent background if no image
-                                      // child: user.profilePicture == null || user.profilePicture.isEmpty
-                                      //     ? Image.asset(
-                                      //   'assets/images/noimage.png',
-                                      //   fit: BoxFit.cover,
-                                      // )
-                                      //     : null,
-                                    ),
+                                    Stack(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 33.31
+                                              .r, // Half of the height/width to achieve the same size
+                                          backgroundImage:
+                                              user.profilePicture!.isEmpty
+                                                  ? AssetImage(
+                                                      'assets/images/noimage.png')
+                                                  : NetworkImage(
+                                                      user.profilePicture!),
+                                          onBackgroundImageError:
+                                              (error, stackTrace) {
+                                            AssetImage(
+                                                'assets/images/noimage.png');
+                                          },
+                                          backgroundColor: VoidColors
+                                              .primary, // Transparent background if no image
+                                          // child: user.profilePicture == null || user.profilePicture.isEmpty
+                                          //     ? Image.asset(
+                                          //   'assets/images/noimage.png',
+                                          //   fit: BoxFit.cover,
+                                          // )
+                                          //     : null,
+                                        ),
 
-                                    // Container(
-                                    //   height: 60.63.h,
-                                    //   width: 60.63.w,
-                                    //   decoration:
-                                    //       BoxDecoration(shape: BoxShape.circle),
-                                    //   child: ClipRRect(
-                                    //     borderRadius:
-                                    //         BorderRadius.circular(50.r),
-                                    //     child: Image.network(
-                                    //       user.profilePicture,
-                                    //       fit: BoxFit.cover,
-                                    //       errorBuilder:
-                                    //           (context, error, stackTrace) {
-                                    //         return Image.asset(
-                                    //           'assets/images/noimage.png',
-                                    //           fit: BoxFit.cover,
-                                    //         );
-                                    //       },
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    Positioned(
-                                      bottom: 1,
-                                      right: 1,
-                                      child: Obx(() {
-                                        return Container(
-                                          height: 7.h,
-                                          width: 10.w,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color:
-                                                userController.status.value ==
-                                                            null ||
-                                                        userController
-                                                                .status.value ==
-                                                            false
-                                                    ? VoidColors.grey2
-                                                    : VoidColors.green,
-                                          ),
-                                        );
-                                      }),
+                                        // Container(
+                                        //   height: 60.63.h,
+                                        //   width: 60.63.w,
+                                        //   decoration:
+                                        //       BoxDecoration(shape: BoxShape.circle),
+                                        //   child: ClipRRect(
+                                        //     borderRadius:
+                                        //         BorderRadius.circular(50.r),
+                                        //     child: Image.network(
+                                        //       user.profilePicture,
+                                        //       fit: BoxFit.cover,
+                                        //       errorBuilder:
+                                        //           (context, error, stackTrace) {
+                                        //         return Image.asset(
+                                        //           'assets/images/noimage.png',
+                                        //           fit: BoxFit.cover,
+                                        //         );
+                                        //       },
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        Positioned(
+                                          bottom: 1,
+                                          right: 1,
+                                          child: Obx(() {
+                                            return Container(
+                                              height: 7.h,
+                                              width: 10.w,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color:
+                                                    userController.status.value ==
+                                                                null ||
+                                                            userController.status
+                                                                    .value ==
+                                                                false
+                                                        ? VoidColors.grey2
+                                                        : VoidColors.green,
+                                              ),
+                                            );
+                                          }),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 2.h),
+                                    Text(
+                                      user.name!,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w400,
+                                        color: VoidColors.blackColor,
+                                      ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 2.h),
-                                Text(
-                                  user.name,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: VoidColors.blackColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     );
                   }),
@@ -189,24 +262,41 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               Expanded(
                 child: Obx(() {
-                  if (searchScreenController.isLoading.value) {
+                  final filteredUsers = _filterUsersWithinRadius();
+
+                  if (filteredUsers.isEmpty) {
                     return Center(
-                        child: CircularProgressIndicator(
-                      color: VoidColors.secondary,
-                    ));
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 24.0),
+                        margin: EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Text(
+                          'There are currently no users nearby',
+                          style: GoogleFonts.poppins(
+                            color: Colors.black, // Black text color
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
                   }
                   return PageView.builder(
                     scrollDirection: Axis.vertical,
-                    itemCount: searchScreenController.users.length,
+                    itemCount: filteredUsers.length,
                     itemBuilder: (context, index) {
-                      final user = searchScreenController.users[index];
-                      final distance = searchScreenController.distances[user.id]
+                      final user = filteredUsers[index];
+                      final distance = locationController.distances[user.id]
                               ?.toInt()
                               .toString() ??
                           'N/A';
-                      final address =
-                          searchScreenController.addresses[user.id] ??
-                              'Unknown Location';
+                      final address = locationController.addresses[user.id] ??
+                          'Unknown Location';
                       return Container(
                         height: 100.h,
                         child: Stack(
@@ -216,7 +306,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               height: 300.h,
                               width: double.infinity,
                               child: Image.network(
-                                user.profilePicture,
+                                user.profilePicture!,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Image.asset(
@@ -255,7 +345,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Obx(() {
-                                        if (searchScreenController
+                                        if (locationController
                                             .isDistanceLoading.value) {
                                           return Align(
                                             alignment: Alignment.topRight,
@@ -353,7 +443,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                   Flexible(
                                                                     flex: 2,
                                                                     child: Text(
-                                                                      user.name,
+                                                                      user.name!,
                                                                       style: GoogleFonts
                                                                           .poppins(
                                                                         fontWeight:
@@ -418,7 +508,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                               Row(
                                                                 children: [
                                                                   Obx(() {
-                                                                    if (searchScreenController
+                                                                    if (locationController
                                                                         .isAddressLoading
                                                                         .value) {
                                                                       return Center(
@@ -563,7 +653,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     runSpacing:
                                                         8.h, // Reduced spacing
                                                     children: List.generate(
-                                                        user.interests.length,
+                                                        user.interests!.length,
                                                         (index) {
                                                       return Container(
                                                         padding: EdgeInsets
@@ -589,7 +679,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                                           ),
                                                         ),
                                                         child: Text(
-                                                          user.interests[index],
+                                                          user.interests![
+                                                              index],
                                                           style: GoogleFonts
                                                               .poppins(
                                                             fontSize: 9
@@ -627,12 +718,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     GestureDetector(
                                                       onTap: () {
                                                         final ChatScreenController
-                                                            chatScreenController =
-                                                            Get.find();
+                                                        chatScreenController =
+                                                        Get.find();
                                                         final chatmodel =
-                                                            chatScreenController
-                                                                .findChatModelByReceiverId(
-                                                                    user.id);
+                                                        chatScreenController
+                                                            .findChatModelByReceiverId(
+                                                            user.id!);
                                                         searchScreenController
                                                             .toggleChatMusic();
                                                         Get.toNamed(
@@ -647,25 +738,23 @@ class _SearchScreenState extends State<SearchScreen> {
                                                             "coinIcon":
                                                                 "assets/icons/coin.png",
                                                             'isFirstTime':
-                                                                chatmodel ==
-                                                                    null,
-                                                            'chatModel':
-                                                                chatmodel ??
-                                                                    ChatModel(
-                                                                      receiverId:
-                                                                          user.id,
-                                                                      messages: [],
-                                                                      userDetails:
-                                                                          UserDetails(
-                                                                        coins:
-                                                                            user.coins ??
-                                                                                0,
-                                                                        profilePicture:
-                                                                            user.profilePicture,
-                                                                        name: user
-                                                                            .name,
-                                                                      ),
-                                                                    ),
+                                                            chatmodel ==
+                                                                null,
+                                                            'chatModel':chatmodel??
+                                                                ChatModel(
+                                                              receiverId:
+                                                                  user.id,
+                                                              messages: [],
+                                                              userDetails:
+                                                                  UserDetails(
+                                                                coins:
+                                                                    user.coins ??
+                                                                        0,
+                                                                profilePicture:
+                                                                    user.profilePicture,
+                                                                name: user.name,
+                                                              ),
+                                                            ),
                                                           },
                                                         );
                                                       },
@@ -677,7 +766,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                           shape:
                                                               BoxShape.circle,
                                                           color:
-                                                              searchScreenController
+                                                              locationController
                                                                       .isChat
                                                                       .value
                                                                   ? VoidColors
@@ -692,7 +781,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                             height: 20.h,
                                                             width: 20.w,
                                                             colorFilter: ColorFilter.mode(
-                                                                searchScreenController
+                                                                locationController
                                                                         .isChat
                                                                         .value
                                                                     ? VoidColors
@@ -725,12 +814,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                                                 .otherUserId
                                                                 .value =
                                                             user.id.toString();
-                                                        final TrackController
-                                                            trackController =
-                                                            Get.find();
-                                                        trackController
-                                                            .isJamWaitingScreenOpen
-                                                            .value = true;
                                                         Get.to(
                                                           () =>
                                                               JammingWaitingScreen(
@@ -782,7 +865,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                           shape:
                                                               BoxShape.circle,
                                                           color:
-                                                              searchScreenController
+                                                              locationController
                                                                       .isChat
                                                                       .value
                                                                   ? VoidColors
@@ -797,7 +880,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                             height: 20.h,
                                                             width: 20.w,
                                                             colorFilter: ColorFilter.mode(
-                                                                searchScreenController
+                                                                locationController
                                                                         .isChat
                                                                         .value
                                                                     ? VoidColors

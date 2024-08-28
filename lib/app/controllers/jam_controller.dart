@@ -21,9 +21,11 @@ class JamController extends GetxController {
     print('THe jam controller is resetted');
   }
 
-  Future<void> completeJamming(int userId, String targetUserId) async {
+  Future<void> completeJamming(int userId,) async {
+    final UserController userController = Get.find();
+
     final url =
-        'https://meet-around-apis-production.up.railway.app/api/user/completeJamming?userId=$userId&targetUserId=$targetUserId';
+        'https://meet-around-apis-production.up.railway.app/api/user/completeJamming?userId=${userController.user.value.id}';
 
     try {
       final response = await http.post(Uri.parse(url));

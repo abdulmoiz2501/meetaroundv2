@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:scratch_project/app/modules/bottomNavBar/views/suggested_people_view.dart';
 import 'package:scratch_project/app/modules/signIn/controllers/sign_in_controller.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:scratch_project/app/controllers/user_controller.dart';
@@ -206,10 +207,13 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                                 ? user.profilePicture!
                                 : VoidImages.testImg,
                             'name': user.name ?? 'Unknown',
+                    'uid': user.id.toString(),
+
                           })
                       .toList() as List<Map<String, String>>,
                   100.0,
                   () {
+
                     // Get.toNamed(Routes.SUGGESTED_PEOPLE);
                   },
                   VoidTexts.suggestPeople,
@@ -239,6 +243,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                               child: Container(
                                 width: double.infinity,
                                 color: Colors.white,
+                                height: 100,
                               ),
                             ),
                           ],

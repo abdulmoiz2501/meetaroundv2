@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:scratch_project/app/modules/bottomNavBar/views/bottom_nav_bar_view.dart';
 
 void showJammingRequestDialog({
   required String name,
@@ -11,20 +10,20 @@ void showJammingRequestDialog({
 }) {
   Get.defaultDialog(
     title: "🎸 Jamming Request",
-    titleStyle: const TextStyle(
-      fontSize: 24,
+    titleStyle: TextStyle(
+      fontSize: 18.sp,
       fontWeight: FontWeight.bold,
       color: Colors.black87,
     ),
     middleText: "User $name wants to jam with you. Do you want to accept?",
-    middleTextStyle: const TextStyle(
-      fontSize: 18,
+    middleTextStyle: TextStyle(
+      fontSize: 14.sp,
       color: Colors.black54,
     ),
     backgroundColor: Colors.white,
-    radius: 10.0,
+    radius: 10.0.r,
     barrierDismissible: true,
-    contentPadding: EdgeInsets.all(20.0),
+    contentPadding: EdgeInsets.all(20.0.w),
     actions: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -35,35 +34,42 @@ void showJammingRequestDialog({
               onReject(); // Perform the rejection logic
             },
             style: ElevatedButton.styleFrom(
+              minimumSize: Size(110.r, 50.r),
+              maximumSize: Size(110.r, 50.r),
               backgroundColor: Colors.redAccent,
-              padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
+             // padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 15.h),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.r),
               ),
             ),
-            child: const Text(
+            child: Text(
               "Reject",
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 12.sp,
                 color: Colors.white,
               ),
             ),
           ),
           ElevatedButton(
+
             onPressed: () {
               Get.back(); // Close the dialog
               onAccept(); // Perform the acceptance logic
             },
             style: ElevatedButton.styleFrom(
+              minimumSize: Size(110.r, 50.r),
+              maximumSize: Size(110.r, 50.r),
               backgroundColor: Color(0xFFFF69B4),
-              padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 10.h),
+              //padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 15.h),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.r),
               ),
             ),
-            child: const Text(
+            child: Text(
               "Accept",
-              style: TextStyle(fontSize: 18, color: Colors.white),
+              style: TextStyle(
+                  fontSize: 12.sp,
+                  color: Colors.white),
             ),
           ),
         ],
